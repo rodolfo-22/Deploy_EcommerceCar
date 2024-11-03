@@ -1,72 +1,52 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import VehicleMenu from "./VehicleMenu"; // Importamos el menú de vehículos
+import VehicleMenu from "./VehicleMenu";
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
-  const [scrollPosition, setScrollPosition] = useState(0);
   const [visible, setVisible] = useState(true);
 
-  // Detectar scroll y dirección para mostrar/ocultar el header
   useEffect(() => {
     let lastScrollY = window.pageYOffset;
 
     const handleScroll = () => {
       const currentScrollY = window.pageYOffset;
-
-      if (lastScrollY > currentScrollY) {
-        setVisible(true); // Mostrar cuando subes
-      } else if (currentScrollY > 100) {
-        setVisible(false); // Ocultar cuando bajas
-      }
-
+      setVisible(lastScrollY > currentScrollY || currentScrollY <= 100);
       lastScrollY = currentScrollY;
     };
 
     window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Función para abrir/cerrar el menú
-  const toggleMenu = () => {
-    setShowMenu(!showMenu);
-  };
+  const toggleMenu = () => setShowMenu(!showMenu);
 
   return (
     <>
-      <header
-        className={`bg-white p-4 fixed w-full z-50 transition-transform duration-300 ${
-          visible ? "translate-y-0" : "-translate-y-full"
-        }`}
-      >
+      <header className={`bg-[#121212] fixed w-full z-50 transition-transform duration-300 ${visible ? "translate-y-0" : "-translate-y-full"}`}>
         <div className="container mx-auto flex justify-between items-center">
-          {/* Nombre del sitio a la izquierda */}
-          <h1 className="text-3xl font-bold text-blue-600">Venta de carros</h1>
+          <Link to="/" aria-label="Inicio de CarConnect">
+            <img src="/ucacars3.png" alt="UCA Cars logo" className="h-24 w-auto" /> 
+          </Link>
 
-          {/* Menú de navegación */}
-          <nav className="flex items-center">
+          <nav className="flex items-center space-x-6">
             <button
               onClick={toggleMenu}
-              className="text-blue-600 font-semibold hover:underline"
+              className="text-[#00BCD4] font-poppins font-semibold hover:text-[#286181] transition-colors duration-300 focus:outline-none"
+              aria-label="Abrir menú de vehículos"
             >
               Vehículos
             </button>
-
-            {/* Botón de Iniciar Sesión */}
             <Link
               to="/login"
-              className="bg-blue-600 text-white ml-4 mr-10 px-4 py-2 rounded-md font-semibold hover:bg-blue-500"
+              className="bg-[#00BCD4] text-white px-4 py-2 rounded-md font-poppins font-semibold hover:bg-[#286181] transition-colors duration-300 focus:outline-none"
+              aria-label="Iniciar Sesión"
             >
               Iniciar Sesión
             </Link>
           </nav>
         </div>
       </header>
-
-      {/* Menú de Vehículos */}
       <VehicleMenu showMenu={showMenu} closeMenu={() => setShowMenu(false)} />
     </>
   );
