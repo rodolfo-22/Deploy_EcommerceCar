@@ -8,16 +8,14 @@ import { CarDetail, AddCarForm, EditCarForm } from "../ecommerce/components";
 import { HashLoader } from "react-spinners";
 
 const AppRouter = ({ setUser, setCars }) => {
+  {
+    /*} 
   const { status, user, checkAuthToken } = useAuthStore();
 
   // Verificar token al cargar la aplicacións
   useEffect(() => {
     checkAuthToken();
   }, []);
-
-  {
-    /*
-const status = 'not-authenticated'; // 'authenticated'; // 'not-authenticated';
 */
   }
 
@@ -155,9 +153,8 @@ const status = 'not-authenticated'; // 'authenticated'; // 'not-authenticated';
       images: ["/civic.jpg", "/civic2.jpg", "/civic3.jpg", "/civic4.jpg"],
     },
   ]);
-
-
-
+  {
+    /*}
 if (status === "checking") {
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -165,18 +162,23 @@ if (status === "checking") {
     </div>
   );
 }
+*/
+  }
 
+  // Simula que el usuario ya está autenticado
+  const status = "not-authenticated"; // Cambia a "authenticated" para saltarte el login not-authenticated
+  const user = { role: "admin" }; // Simula un rol de usuario, como "admin" o "user"
 
   return (
     <Routes>
       {status === "not-authenticated" ? (
-        // Rutas públicas
+        // Rutas públicas, 
         <>
           <Route path="/" element={<MainPage cars={cars} />} />
           <Route path="/login" element={<LoginPage setUser={setUser} />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/car/:id" element={<CarDetail cars={cars} />} />
-          <Route path="*" element={<Navigate to="/login" />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </>
       ) : (
         <>
