@@ -1,47 +1,40 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useAuthStore, useForm } from "../hooks";
+import Swal from "sweetalert2";
 
-const Login = ({ setUser }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
+const loginFormFields = {
+  loginEmail: "",
+  loginPassword: "",
+};
 
-  const handleLogin = (e) => {
-    e.preventDefault();
+const Login = () => {
+  const { startLogin, errorMessage } = useAuthStore();
 
-    // Simulación de autenticación
-    const adminCredentials = {
-      email: "admin@example.com",
-      password: "admin123",
-    };
+  const {
+    loginEmail,
+    loginPassword,
+    onInputChange: onLoginInputChange,
+  } = useForm(loginFormFields);
 
-    if (
-      email === adminCredentials.email &&
-      password === adminCredentials.password
-    ) {
-      const user = {
-        email,
-        role: "admin",
-      };
-
-      // Establecer el usuario autenticado
-      setUser(user);
-
-      // Redirigir a la página del admin
-      navigate("/admin");
-    } else {
-      // Mostrar mensaje de error
-      setError("Correo o contraseña incorrectos.");
-    }
+  const loginSubmit = (event) => {
+    event.preventDefault();
+    startLogin({ email: loginEmail, password: loginPassword });
   };
+
+  useEffect(() => {
+    if (errorMessage !== undefined) {
+      Swal.fire("Error en la autenticación", errorMessage, "error");
+    }
+  }, [errorMessage]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white rounded-lg p-8 shadow-md w-full max-w-sm">
         <h2 className="text-2xl font-bold text-center mb-6">Inicia sesión</h2>
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-        <form onSubmit={handleLogin}>
+        {errorMessage && (
+          <p className="text-red-500 text-center mb-4">{errorMessage}</p>
+        )}
+        <form onSubmit={loginSubmit}>
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -54,8 +47,9 @@ const Login = ({ setUser }) => {
               id="email"
               type="email"
               placeholder="Correo electrónico"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name="loginEmail"
+              value={loginEmail}
+              onChange={onLoginInputChange}
               required
             />
           </div>
@@ -71,8 +65,9 @@ const Login = ({ setUser }) => {
               id="password"
               type="password"
               placeholder="Ingrese su contraseña"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="loginPassword"
+              value={loginPassword}
+              onChange={onLoginInputChange}
               required
             />
           </div>
@@ -80,6 +75,7 @@ const Login = ({ setUser }) => {
             <button
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
+              value="Login"
             >
               Ingresar
             </button>

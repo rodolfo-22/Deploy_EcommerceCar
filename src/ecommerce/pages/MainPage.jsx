@@ -1,9 +1,7 @@
 import React from 'react';
 import { FaCar } from 'react-icons/fa';
-import CardView from '../components/CardView';
-import Footer from '../components/Footer';
-import Header from '../components/Header';
-import Carousel from '../components/Carousel';
+import { CardView, Footer, Header, Carousel } from '../components';
+
 
 const MainPage = ({ cars }) => {
   return (
