@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import CarListAdmin from "./CarListAdmin";
-import AddCarForm from "../components/AddCarForm";
-import EditCarForm from "../components/EditCarForm";
 
 const AdminPage = ({ cars, setCars }) => {
   const deleteCar = (id) => {

@@ -1,15 +1,25 @@
-import React, { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { useAuthStore } from "../hooks";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { useEffect, useState } from "react";
 import LoginPage from "../auth/LoginPage";
 import RegisterPage from "../auth/RegisterPage";
-import MainPage from "../ecommerce/pages/MainPage";
-import CarDetail from "../ecommerce/components/CarDetail";
-import AdminPage from "../ecommerce/pages/AdminPage";
-import AddCarForm from "../ecommerce/components/AddCarForm";
-import EditCarForm from "../ecommerce/components/EditCarForm";
+import { MainPage, AdminPage, SellerPage } from "../ecommerce/pages";
+import { CarDetail, AddCarForm, EditCarForm } from "../ecommerce/components";
 
+const AppRouter = ({ setUser, setCars }) => {
+  const { status, user, checkAuthToken } = useAuthStore();
 
-const AppRouter = ({ user, setUser, setCars }) => {
+  // Verificar token al cargar la aplicacións
+  useEffect(() => {
+    checkAuthToken();
+  }, []);
+
+  {
+    /*
+const status = 'not-authenticated'; // 'authenticated'; // 'not-authenticated';
+*/
+  }
+
   const [cars] = useState([
     {
       id: 1,
@@ -145,39 +155,69 @@ const AppRouter = ({ user, setUser, setCars }) => {
     },
   ]);
 
+  if (status === "checking") {
+    return <h3>Cargando...</h3>;
+  }
+
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage setUser={setUser} />} />
-      <Route path="/register" element={<RegisterPage />} />
-      <Route path="/*" element={<MainPage cars={cars} />} />
-      <Route path="/car/:id" element={<CarDetail cars={cars} />} />
+      {status === "not-authenticated" ? (
+        // Rutas públicas
+        <>
+          <Route path="/" element={<MainPage cars={cars} />} />
+          <Route path="/login" element={<LoginPage setUser={setUser} />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/car/:id" element={<CarDetail cars={cars} />} />
+          <Route path="*" element={<Navigate to="/login" />} />
+        </>
+      ) : (
+        <>
+          {/* Ruta para usuarios autenticados */}
 
-      {/* Ruta del administrador donde puede gestionar autos */}
-      <Route
-        path="/admin"
-        element={<AdminPage cars={cars} setCars={setCars} />}
-      />
+          {/* Rutas para usuario con rol "user" */}
+          {user.role === "user" ? (
+            <>
+              <Route path="/vendedor" element={<SellerPage />} />
+              <Route path="*" element={<Navigate to="/vendedor" />} />
+            </>
+          ) : null}
 
-      {/* Ruta para agregar un nuevo auto */}
-      <Route
-        path="/admin/add-car"
-        element={<AddCarForm addCar={(newCar) => setCars([...cars, newCar])} />}
-      />
-
-      {/* Ruta para editar un auto existente */}
-      <Route
-        path="/edit-car/:id"
-        element={
-          <EditCarForm
-            cars={cars}
-            updateCar={(updatedCar) => {
-              setCars(
-                cars.map((car) => (car.id === updatedCar.id ? updatedCar : car))
-              );
-            }}
-          />
-        }
-      />
+          {/* Rutas para administrador */}
+          {user.role === "admin" ? (
+            <>
+              <Route
+                path="/admin"
+                element={<AdminPage cars={cars} setCars={setCars} />}
+              />
+              <Route
+                path="/admin/add-car"
+                element={
+                  <AddCarForm addCar={(newCar) => setCars([...cars, newCar])} />
+                }
+              />
+              <Route
+                path="/edit-car/:id"
+                element={
+                  <EditCarForm
+                    cars={cars}
+                    updateCar={(updatedCar) => {
+                      setCars(
+                        cars.map((car) =>
+                          car.id === updatedCar.id ? updatedCar : car
+                        )
+                      );
+                    }}
+                  />
+                }
+              />
+              <Route path="*" element={<Navigate to="/admin" />} />
+            </>
+          ) : (
+            // Si el usuario autenticado no tiene rol asignado
+            <Route path="*" element={<Navigate to="/" />} />
+          )}
+        </>
+      )}
     </Routes>
   );
 };
