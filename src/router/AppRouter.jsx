@@ -5,6 +5,7 @@ import LoginPage from "../auth/LoginPage";
 import RegisterPage from "../auth/RegisterPage";
 import { MainPage, AdminPage, SellerPage } from "../ecommerce/pages";
 import { CarDetail, AddCarForm, EditCarForm } from "../ecommerce/components";
+import { HashLoader } from "react-spinners";
 
 const AppRouter = ({ setUser, setCars }) => {
   const { status, user, checkAuthToken } = useAuthStore();
@@ -155,9 +156,16 @@ const status = 'not-authenticated'; // 'authenticated'; // 'not-authenticated';
     },
   ]);
 
-  if (status === "checking") {
-    return <h3>Cargando...</h3>;
-  }
+
+
+if (status === "checking") {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <HashLoader color="#36d7b7" size={50} />
+    </div>
+  );
+}
+
 
   return (
     <Routes>
