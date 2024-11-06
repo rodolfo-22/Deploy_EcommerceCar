@@ -26,7 +26,9 @@ export const useAuthStore = () => {
         // Retorna un estado de éxito
         return { success: true };
     } catch (error) {
+        // Llamar a onLogout para resetear el estado en caso de error
         dispatch(onLogout());
+        
         // Retorna el mensaje de error para manejarlo en la vista
         return { success: false, message: "Credenciales incorrectas" };
     }
@@ -49,27 +51,23 @@ export const useAuthStore = () => {
         }
     };
 
-
 const checkAuthToken = async () => {
     const token = localStorage.getItem('token');
-    if (!token) return dispatch(onLogout()); // Si no hay token, desloguea
+    if (!token) return dispatch(onLogout());
 
     try {
-        const { data } = await EcommerApi.get('/auth/renew'); // Asegúrate de que la URL esté correcta
+        const { data } = await EcommerApi.get('auth/renew');
         localStorage.setItem('token', data.token);
         localStorage.setItem('token-init-date', new Date().getTime());
-
-        // Incluye el rol y otros datos necesarios
-        dispatch(onLogin({ name: data.user.name, uid: data.user._id, role: data.user.role }));
+        
+        // Incluye el rol aquí
+        dispatch(onLogin({ name: data.name, uid: data.uid, role: data.role }));
     } catch (error) {
-        // Solo desloguea si es un error de autenticación
-        if (error.response && error.response.status === 401) {
             localStorage.clear();
             dispatch(onLogout());
-        }
+        
     }
 };
-
 
 
     const startLogout = () => {
