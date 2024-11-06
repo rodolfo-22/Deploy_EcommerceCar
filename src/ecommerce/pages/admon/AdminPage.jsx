@@ -18,6 +18,12 @@ const AdminPage = ({ cars, setCars }) => {
       >
         Agregar Nuevo Vehículo
       </Link>
+      <Link
+        to="/admin/register"
+        className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 mb-4 inline-block"
+      >
+        crear usuario
+      </Link>
       <CarListAdmin cars={cars} deleteCar={deleteCar} />
     </div>
   );

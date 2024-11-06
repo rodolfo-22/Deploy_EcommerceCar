@@ -2,22 +2,18 @@ import { useAuthStore } from "../hooks";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
 import LoginPage from "../auth/LoginPage";
-import RegisterPage from "../auth/RegisterPage";
-import { MainPage, AdminPage, SellerPage } from "../ecommerce/pages";
+import { MainPage, AdminPage, RegisterPage, SellerPage } from "../ecommerce/pages";
 import { CarDetail, AddCarForm, EditCarForm } from "../ecommerce/components";
 import { HashLoader } from "react-spinners";
 
 const AppRouter = ({ setUser, setCars }) => {
-  {
-    /*} 
   const { status, user, checkAuthToken } = useAuthStore();
 
   // Verificar token al cargar la aplicacións
   useEffect(() => {
     checkAuthToken();
   }, []);
-*/
-  }
+
 
   const [cars] = useState([
     {
@@ -154,7 +150,7 @@ const AppRouter = ({ setUser, setCars }) => {
     },
   ]);
   {
-    /*}
+
 if (status === "checking") {
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -162,21 +158,15 @@ if (status === "checking") {
     </div>
   );
 }
-*/
-  }
 
-  // Simula que el usuario ya está autenticado
-  const status = "not-authenticated"; // Cambia a "authenticated" para saltarte el login not-authenticated
-  const user = { role: "admin" }; // Simula un rol de usuario, como "admin" o "user"
 
   return (
     <Routes>
       {status === "not-authenticated" ? (
-        // Rutas públicas, 
+        // Rutas públicas,
         <>
           <Route path="/" element={<MainPage cars={cars} />} />
           <Route path="/login" element={<LoginPage setUser={setUser} />} />
-          <Route path="/register" element={<RegisterPage />} />
           <Route path="/car/:id" element={<CarDetail cars={cars} />} />
           <Route path="*" element={<Navigate to="/" />} />
         </>
@@ -199,6 +189,7 @@ if (status === "checking") {
                 path="/admin"
                 element={<AdminPage cars={cars} setCars={setCars} />}
               />
+              <Route path="/admin/register" element={<RegisterPage />} />
               <Route
                 path="/admin/add-car"
                 element={
@@ -206,7 +197,7 @@ if (status === "checking") {
                 }
               />
               <Route
-                path="/edit-car/:id"
+                path="/admin/edit-car/:id"
                 element={
                   <EditCarForm
                     cars={cars}
@@ -231,5 +222,5 @@ if (status === "checking") {
     </Routes>
   );
 };
-
+}
 export default AppRouter;

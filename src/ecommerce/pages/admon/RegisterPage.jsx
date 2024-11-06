@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { useAuthStore } from "../hooks";
+import { useAuthStore } from "../../../hooks";
+import Swal from "sweetalert2";
 
 const RegisterPage = () => {
-  const { startRegister, errorMessage } = useAuthStore();
+  const { startRegister } = useAuthStore();
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -17,9 +18,31 @@ const RegisterPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    startRegister(form);
+    const result = await startRegister(form);
+
+    // Muestra mensajes 
+    if (result.success) {
+      Swal.fire({
+        icon: "success",
+        title: "Usuario creado exitosamente",
+        confirmButtonText: "Aceptar",
+      });
+            // Restablece el formulario a los valores iniciales
+      setForm({
+        username: "",
+        email: "",
+        password: "",
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error al crear el usuario",
+        text: result.message,
+        confirmButtonText: "Aceptar",
+      });
+    }
   };
 
   return (
@@ -66,15 +89,6 @@ const RegisterPage = () => {
             Crear cuenta
           </button>
         </form>
-        {errorMessage && (
-          <p className="text-red-500 mt-4 text-center">{errorMessage}</p>
-        )}
-        <div className="text-center mt-6 text-gray-500">——— o ———</div>
-        <div className="text-center mt-4">
-          <a href="/login" className="text-blue-600 hover:underline">
-            Ingresar
-          </a>
-        </div>
       </div>
     </div>
   );
