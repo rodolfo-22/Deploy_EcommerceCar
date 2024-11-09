@@ -1,11 +1,11 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const CardView = ({ car }) => {
   const navigate = useNavigate();
 
   const handleCardClick = () => {
-    navigate(`/car/${car.id}`);
+    navigate(`/car/${car._id}`); // Cambié `car.id` por `car._id`
   };
 
   return (
@@ -15,16 +15,22 @@ const CardView = ({ car }) => {
       aria-label={`Tarjeta de ${car.model}`}
     >
       <img
-        src={car.images[0]}
+        src={car.image[0]} // Cambié `car.images` por `car.image`
         alt={`Imagen del modelo ${car.model}`}
         className="w-full h-48 object-cover mb-4 rounded-md"
         loading="lazy"
       />
-      <h3 className="text-xl font-raleway font-bold text-[#00BCD4]" aria-label={`Modelo ${car.model}`}>
+      <h3
+        className="text-xl font-raleway font-bold text-[#00BCD4]"
+        aria-label={`Modelo ${car.model}`}
+      >
         {car.model}
       </h3>
-      <p className="text-lg font-poppins text-[#8C8C8C]" aria-label={`Precio: ${car.price}`}>
-        {car.price}
+      <p
+        className="text-lg font-poppins text-[#8C8C8C]"
+        aria-label={`Precio: ${car.price}`}
+      >
+        ${car.price} {/* Agregué el símbolo de dólar para el precio */}
       </p>
     </div>
   );

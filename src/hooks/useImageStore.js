@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-const useImageStore = () => {
+export const useImageStore = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -16,8 +16,6 @@ const useImageStore = () => {
       formData.append("upload_preset", import.meta.env.VITE_APP_CLOUDINARY_UPLOAD_PRESET);
 
       try {
-          console.log("Cloudinary Config:", import.meta.env.VITE_APP_CLOUDINARY_CLOUD_NAME, import.meta.env.VITE_APP_CLOUDINARY_UPLOAD_PRESET);
-
         const response = await axios.post(
           `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_APP_CLOUDINARY_CLOUD_NAME}/image/upload`,
           formData
@@ -31,10 +29,11 @@ const useImageStore = () => {
     }
 
     setLoading(false);
+      console.log("Uploaded image URLs:", urls); // Verifica todas las URLs subidas
+
     return urls;
   };
 
   return { uploadImages, loading, error };
 };
 
-export default useImageStore;
