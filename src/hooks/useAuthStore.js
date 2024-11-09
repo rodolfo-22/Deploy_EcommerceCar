@@ -23,37 +23,31 @@ export const useAuthStore = () => {
             uid: data.user._id,
             role: data.user.role
         }));
+        // Retorna un estado de éxito
+        return { success: true };
     } catch (error) {
-        dispatch(onLogout('Credenciales incorrectas'));
-        setTimeout(() => {
-            dispatch(clearErrorMessage());
-        }, 10);
-        }
+        // Llamar a onLogout para resetear el estado en caso de error
+        dispatch(onLogout());
+        
+        // Retorna el mensaje de error para manejarlo en la vista
+        return { success: false, message: "Credenciales incorrectas" };
+    }
     }
 
     const startRegister = async ({ username, email, password }) => {
-        dispatch(onChecking());
-            console.log({ username, email, password }); // Verifica los datos antes de enviarlos
         try {
             const { data } = await EcommerApi.post('/users/register', { username, email, password });
 
-            // Almacena el token y la fecha de inicio
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('token-init-date', new Date().getTime());
-
-            // Incluye el rol en el dispatch
-            dispatch(onLogin({
-                name: data.user.username,
-                uid: data.user._id,
-                role: data.user.role
-            }));
+            // Verifica si el registro fue exitoso
+            if (data && data._id) {
+                return { success: true, message: 'Usuario registrado exitosamente' };
+            } else {
+                throw new Error('Registro fallido');
+            }
         } catch (error) {
-                    console.error(error.response); // Verificar los detalles del error
-
-            dispatch(onLogout(error.response?.data?.msg || 'Error en el registro'));
-            setTimeout(() => {
-                dispatch(clearErrorMessage());
-            }, 3000); // Mantén el mensaje de error visible por 3 segundos
+        console.error('Error en el registro:', error.response?.data || error.message);
+        const errorMessage = error.response?.data?.message || 'Error en el registro';
+        return { success: false, message: errorMessage }; 
         }
     };
 
@@ -69,8 +63,9 @@ const checkAuthToken = async () => {
         // Incluye el rol aquí
         dispatch(onLogin({ name: data.name, uid: data.uid, role: data.role }));
     } catch (error) {
-        localStorage.clear();
-        dispatch(onLogout());
+            localStorage.clear();
+            dispatch(onLogout());
+        
     }
 };
 
