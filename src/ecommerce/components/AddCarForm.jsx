@@ -38,26 +38,26 @@ const AddCarForm = () => {
       return;
     }
 
-    const newCar = {
-      manufacturer,
-      model,
-      engine,
-      year,
-      price,
-      description,
-      type,
-      stock,
-      transmission,
-      mileage,
-      status,
-      fuelType,
-      vinCode,
-      driveTrain,
-      numberOfDoors,
-      color,
-      seatingCapacity,
-      image: uploadedUrls,
-    };
+  const newCar = {
+    manufacturer: manufacturer || "Toyota",
+    model: model || "Corolla",
+    engine: engine || "2.0L",
+    year: year || "2022",
+    price: price || "20000",
+    description: description || "Vehículo en excelente estado",
+    type: type || "Sedán",
+    stock: stock || "5",
+    transmission: transmission || "Automática",
+    mileage: mileage || "0",
+    status: status || "Nuevo",
+    fuelType: fuelType || "Gasolina",
+    vinCode: vinCode || "1G1RC6E42BU52N485",
+    driveTrain: driveTrain || "traccion delantera",
+    numberOfDoors: numberOfDoors || "4",
+    color: color || "Negro",
+    seatingCapacity: seatingCapacity || "5",
+    image: uploadedUrls,
+  };
 
     try {
       await addCar(newCar);
@@ -85,10 +85,10 @@ return (
           </label>
           <input
             type="text"
+            placeholder="Toyota"
             value={manufacturer}
             onChange={(e) => setManufacturer(e.target.value)}
             className="border w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
           />
         </div>
         <div>
@@ -97,10 +97,10 @@ return (
           </label>
           <input
             type="text"
+            placeholder="Corolla"
             value={model}
             onChange={(e) => setModel(e.target.value)}
             className="border w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
           />
         </div>
         <div>
@@ -109,10 +109,10 @@ return (
           </label>
           <input
             type="number"
+            placeholder="2022"
             value={year}
             onChange={(e) => setYear(e.target.value)}
             className="border w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
           />
         </div>
         <div>
@@ -121,10 +121,10 @@ return (
           </label>
           <input
             type="number"
+            placeholder="20000"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             className="border w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
           />
         </div>
         <div>
@@ -133,10 +133,10 @@ return (
           </label>
           <input
             type="text"
+            placeholder="Vehículo en excelente estado"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="border w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
           />
         </div>
         <div>
@@ -145,10 +145,10 @@ return (
           </label>
           <input
             type="text"
+            placeholder="Gasolina"
             value={fuelType}
             onChange={(e) => setFuelType(e.target.value)}
             className="border w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
           />
         </div>
         <div>
@@ -157,10 +157,10 @@ return (
           </label>
           <input
             type="text"
+            placeholder="2.0L"
             value={engine}
             onChange={(e) => setEngine(e.target.value)}
             className="border w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
           />
         </div>
         <div>
@@ -169,10 +169,10 @@ return (
           </label>
           <input
             type="text"
+            placeholder="Sedán"
             value={type}
             onChange={(e) => setType(e.target.value)}
             className="border w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
           />
         </div>
         <div>
@@ -181,10 +181,10 @@ return (
           </label>
           <input
             type="number"
+            placeholder="5"
             value={stock}
             onChange={(e) => setStock(e.target.value)}
             className="border w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
           />
         </div>
         <div>
@@ -193,10 +193,10 @@ return (
           </label>
           <input
             type="text"
+            placeholder="Automática"
             value={transmission}
             onChange={(e) => setTransmission(e.target.value)}
             className="border w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
           />
         </div>
         <div>
@@ -205,6 +205,7 @@ return (
           </label>
           <input
             type="number"
+            placeholder="0"
             value={mileage}
             onChange={(e) => setMileage(e.target.value)}
             className="border w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -212,14 +213,14 @@ return (
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Estado (nuevo/usado)
+            Estado
           </label>
           <input
             type="text"
+            placeholder="Nuevo"
             value={status}
             onChange={(e) => setStatus(e.target.value)}
             className="border w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
           />
         </div>
         <div>
@@ -228,10 +229,10 @@ return (
           </label>
           <input
             type="text"
+            placeholder="1G1RC6E42BU52N485"
             value={vinCode}
             onChange={(e) => setVinCode(e.target.value)}
             className="border w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
           />
         </div>
         <div>
@@ -240,6 +241,7 @@ return (
           </label>
           <input
             type="text"
+            placeholder="traccion delantera"
             value={driveTrain}
             onChange={(e) => setDriveTrain(e.target.value)}
             className="border w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -251,6 +253,7 @@ return (
           </label>
           <input
             type="number"
+            placeholder="4"
             value={numberOfDoors}
             onChange={(e) => setNumberOfDoors(e.target.value)}
             className="border w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -262,6 +265,7 @@ return (
           </label>
           <input
             type="text"
+            placeholder="Negro"
             value={color}
             onChange={(e) => setColor(e.target.value)}
             className="border w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -273,6 +277,7 @@ return (
           </label>
           <input
             type="number"
+            placeholder="5"
             value={seatingCapacity}
             onChange={(e) => setSeatingCapacity(e.target.value)}
             className="border w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -280,7 +285,7 @@ return (
         </div>
         <div className="sm:col-span-2">
           <label className="block text-sm font-medium text-gray-700">
-            Imágenes
+            Imágenes (Formato permitido JPG, PNG, SVG)
           </label>
           <input
             type="file"
