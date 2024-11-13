@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { EcommerApi } from "../api"; 
 
 export const useCarService = () => {
-    const [cars, setCars] = useState([]);
+    const [cars, setCars] = useState([]);// Inicializamos como arreglo vacío
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -20,7 +20,7 @@ export const useCarService = () => {
         setLoading(true);
         try {
             const response = await EcommerApi.get("/products");
-            setCars(response.data); // Almacena los datos en el estado
+            setCars(Array.isArray(response.data) ? response.data : []); // Asegura que cars sea un arreglo
             setError(null); // Limpia cualquier error previo
         } catch (error) {
             setError(error.response?.data?.message || "Error al obtener los carros");
