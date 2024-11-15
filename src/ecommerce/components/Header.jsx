@@ -39,7 +39,7 @@ const Header = () => {
             </button>
             <Link
               to="/login"
-              className="bg-[#00BCD4] text-white px-4 py-2 rounded-md font-poppins font-semibold hover:bg-[#286181] transition-colors duration-300 focus:outline-none"
+              className="bg-[#F53756] text-white px-4 py-2 rounded-md font-poppins font-semibold hover:bg-[#286181] transition-colors duration-300 focus:outline-none"
               aria-label="Iniciar Sesión"
             >
               Iniciar Sesión
