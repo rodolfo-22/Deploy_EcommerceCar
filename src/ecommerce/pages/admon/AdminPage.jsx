@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import CarListAdmin from "./CarListAdmin";
-import { HeaderLogin } from "../../components";
+import { HeaderLogin, VehiclesMain } from "../../components";
 import { useCarService } from "../../../hooks";
 import profileImage from "../../../assets/profile.png";
 
@@ -57,8 +56,8 @@ const AdminPage = () => {
       <div className="w-5/6">
 
         {/* Vamos a implementar un renderizado condicional en base al estado de selected component */}
-        {/* <HeaderLogin /> */}
-        {selectedComponent === 1 && <CarListAdmin cars={cars} deleteCar={deleteCar} />}
+        <HeaderLogin />
+        {selectedComponent === 1 && <VehiclesMain cars={cars} deleteCar={deleteCar} />}
         {selectedComponent === 2 && <div>Administrar empleados</div>}
         {selectedComponent === 3 && <div>Sucursales de venta</div>}
         {selectedComponent === 4 && <div>Asistir cotizaciones</div>}
