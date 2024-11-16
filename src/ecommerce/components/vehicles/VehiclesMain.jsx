@@ -1,19 +1,25 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import AddCarForm from "./AddCarForm";
 
-const VehiclesMain = ({ cars, deleteCar }) => {
-
+const VehiclesMain = ({ cars, deleteCar, setCars }) => {
   const [showModal, setShowModal] = useState(false);
+  const [currentCar, setCurrentCar] = useState(null);
 
-  const openModal = () => setShowModal(true);
-  const closeModal = () => setShowModal(false);
+  const openModal = (car = null) => {
+    setCurrentCar(car); // Si se proporciona un vehículo, se usará para edición
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setCurrentCar(null); // Limpia el vehículo actual al cerrar el modal
+    setShowModal(false);
+  };
 
   return (
     <div className="p-4 flex justify-center items-center">
-      <div className="border-4 border-gray-300 rounded-lg p-6 w-full max-w-full bg-white ">
+      <div className="border-4 border-gray-300 rounded-lg p-6 w-full max-w-full bg-white">
         <h2 className="text-2xl font-bold mb-4 text-center">
-          Gestionar vehiculos
+          Gestionar vehículos
         </h2>
 
         {/* Sección de selección de sucursal y botón de agregar */}
@@ -30,37 +36,46 @@ const VehiclesMain = ({ cars, deleteCar }) => {
               {/* Agrega opciones de sucursales aquí */}
             </select>
           </div>
-          {/* Sección del modal para gregar carros */}
+          {/* Botón para abrir el modal para agregar */}
           <button
-            onClick={openModal}
+            onClick={() => openModal()} // Llama a openModal sin argumentos para agregar
             className="bg-black text-white px-4 py-2 rounded-md font-semibold hover:bg-gray-800"
           >
             + Agregar vehículo
           </button>
-
-          {/* Modal */}
-          {showModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-              <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl relative">
-                <button
-                  onClick={closeModal}
-                  className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-                >
-                  ✖
-                </button>
-                <AddCarForm />
-              </div>
-            </div>
-          )}
         </div>
 
-        <h2 className="text-xl font-bold mb-4">Vehículos por Sucursal</h2>
-        {/* Sección de selección de sucursal y botón de agregar */}
+        {showModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl relative">
+              <button
+                onClick={closeModal}
+                className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+              >
+                ✖
+              </button>
+              <AddCarForm
+                car={currentCar}
+                onClose={closeModal}
+                onSave={(savedCar) => {
+                  setCars((prevCars) =>
+                    savedCar._id
+                      ? prevCars.map((car) =>
+                          car._id === savedCar._id ? savedCar : car
+                        )
+                      : [...prevCars, savedCar]
+                  );
+                }} // Aquí pasamos correctamente `onSave`
+              />
+            </div>
+          </div>
+        )}
+
         <table className="w-full border-collapse bg-white">
           <thead>
             <tr className="border-b-2 border-gray-300 text-left text-gray-500">
               <th className="px-4 py-2 font-semibold">Fabricante</th>
-              <th className="px-4 py-2 font-semibold">Modelo de vehículo</th>
+              <th className="px-4 py-2 font-semibold">Modelo</th>
               <th className="px-4 py-2 font-semibold">Año</th>
               <th className="px-4 py-2 font-semibold">Estado</th>
               <th className="px-4 py-2 font-semibold">Acciones</th>
@@ -77,12 +92,12 @@ const VehiclesMain = ({ cars, deleteCar }) => {
                 <td className="px-4 py-2">{car.year}</td>
                 <td className="px-4 py-2">{car.status}</td>
                 <td className="px-4 py-2 flex justify-center space-x-2">
-                  <Link
-                    to={`/edit-car/${car._id}`}
+                  <button
+                    onClick={() => openModal(car)}
                     className="text-blue-500 hover:underline"
                   >
                     ✏️
-                  </Link>
+                  </button>
                   <button
                     onClick={() => deleteCar(car._id)}
                     className="text-red-500 hover:underline"
@@ -97,7 +112,6 @@ const VehiclesMain = ({ cars, deleteCar }) => {
       </div>
     </div>
   );
-
 };
 
 export default VehiclesMain;

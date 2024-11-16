@@ -5,13 +5,24 @@ import { useCarService } from "../../../hooks";
 import profileImage from "../../../assets/profile.png";
 
 const AdminPage = () => {
-  const { cars, loading, error, deleteCarById } = useCarService();
+  const { cars, loading, error, deleteCarById, getAllCars } = useCarService();
+  const [carsState, setCars] = useState(cars);
 
   const deleteCar = async (id) => {
     try {
       await deleteCarById(id);
+      await getAllCars();
     } catch (err) {
       console.error("Error al eliminar el vehículo:", err);
+    }
+  };
+
+  // Función para manejar el guardado (agregar/actualizar) de un vehículo
+  const handleSaveCar = async () => {
+    try {
+      await getAllCars(); // Refresca la lista de vehículos después de guardar
+    } catch (err) {
+      console.error("Error al guardar el vehículo:", err);
     }
   };
 
@@ -21,9 +32,7 @@ const AdminPage = () => {
     setSelectedComponent(option);
   };
 
-  useEffect(() => {
-    console.log("Selected component:", selectedComponent);
-  }, [selectedComponent]);
+  useEffect(() => {}, [selectedComponent]);
 
   if (loading) return <div>Cargando vehículos...</div>;
   if (error) return <div>{error}</div>;
@@ -33,31 +42,46 @@ const AdminPage = () => {
       {/* Sidebar */}
       <div className="bg-gray-950 text-white p-4 h-full w-1/6">
         <div className="flex justify-center m-10">
-          <img class="h-auto w-auto rounded-lg dark:shadow-gray-800" src={profileImage} alt="image description"></img>
+          <img
+            className="h-auto w-auto rounded-lg dark:shadow-gray-800"
+            src={profileImage}
+            alt="image description"
+          ></img>
         </div>
         <div className="flex justify-center">
           <p className="text-3xl">Carlos Hernández</p>
         </div>
-        <div className="flex justify-center mt-10" onClick={() => setComponent(1)}>
-          <Link to="/admin" className="block py-2 text-xl mb-5">Gestionar vehículos</Link>
+        <div
+          className="flex justify-center mt-10"
+          onClick={() => setComponent(1)}
+        >
+          <Link to="/admin" className="block py-2 text-xl mb-5">
+            Gestionar vehículos
+          </Link>
         </div>
         <div className="flex justify-center" onClick={() => setComponent(2)}>
-          <Link to="#" className="block py-2 text-xl mb-5">Administrar empleados</Link>
+          <Link to="#" className="block py-2 text-xl mb-5">
+            Administrar empleados
+          </Link>
         </div>
         <div className="flex justify-center" onClick={() => setComponent(3)}>
-          <Link to="#" className="block py-2 text-xl mb-5">Sucursales de venta</Link>
+          <Link to="#" className="block py-2 text-xl mb-5">
+            Sucursales de venta
+          </Link>
         </div>
         <div className="flex justify-center" onClick={() => setComponent(4)}>
-          <Link to="#" className="block py-2 text-xl mb-5">Asistir cotizaciones</Link>
+          <Link to="#" className="block py-2 text-xl mb-5">
+            Asistir cotizaciones
+          </Link>
         </div>
       </div>
 
       {/* Content */}
       <div className="w-5/6">
-
-        {/* Vamos a implementar un renderizado condicional en base al estado de selected component */}
         <HeaderLogin />
-        {selectedComponent === 1 && <VehiclesMain cars={cars} deleteCar={deleteCar} />}
+        {selectedComponent === 1 && (
+          <VehiclesMain cars={cars} deleteCar={deleteCar} setCars={setCars} />
+        )}
         {selectedComponent === 2 && <div>Administrar empleados</div>}
         {selectedComponent === 3 && <div>Sucursales de venta</div>}
         {selectedComponent === 4 && <div>Asistir cotizaciones</div>}
@@ -67,4 +91,3 @@ const AdminPage = () => {
 };
 
 export default AdminPage;
-

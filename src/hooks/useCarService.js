@@ -54,18 +54,21 @@ export const useCarService = () => {
         try {
             const response = await EcommerApi.put(`/products/${id}`, updatedData);
             // Actualiza el estado del carro modificado
-            setCars(cars.map(car => (car._id === id ? response.data : car)));
+            setCars((prevCars) =>
+            prevCars.map((car) => (car._id === id ? response.data : car))
+            );
             return response.data;
         } catch (error) {
-            setError(error.response?.data?.message || "Error al actualizar el carro");
-            throw error;
+                throw error.response?.data?.message || "Error al actualizar el vehículo";
         }
     };
 
     // Efecto para cargar todos los carros automáticamente cuando se monta el hook
-    useEffect(() => {
-        getAllCars();
-    }, []);
+        useEffect(() => {
+            // Llama a getAllCars cuando se monta el hook
+            getAllCars();
+        }, []); // Deja el array vacío para que solo se ejecute al montar
+
 
     return {
         cars,
