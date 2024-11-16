@@ -4,6 +4,7 @@ import CarListAdmin from "./CarListAdmin";
 import { HeaderLogin } from "../../components";
 import { useCarService } from "../../../hooks";
 import profileImage from "../../../assets/profile.png";
+import EmployeesMain from "../../components/employees/EmployeesMain";
 
 const AdminPage = () => {
   const { cars, loading, error, deleteCarById } = useCarService();
@@ -59,7 +60,7 @@ const AdminPage = () => {
         {/* Vamos a implementar un renderizado condicional en base al estado de selected component */}
         {/* <HeaderLogin /> */}
         {selectedComponent === 1 && <CarListAdmin cars={cars} deleteCar={deleteCar} />}
-        {selectedComponent === 2 && <div>Administrar empleados</div>}
+        {selectedComponent === 2 && <EmployeesMain />}
         {selectedComponent === 3 && <div>Sucursales de venta</div>}
         {selectedComponent === 4 && <div>Asistir cotizaciones</div>}
       </div>
