@@ -64,10 +64,10 @@ export const useCarService = () => {
     };
 
     // Efecto para cargar todos los carros automáticamente cuando se monta el hook
-        useEffect(() => {
-            // Llama a getAllCars cuando se monta el hook
-            getAllCars();
-        }, []); // Deja el array vacío para que solo se ejecute al montar
+    useEffect(() => {
+        // Llama a getAllCars cuando se monta el hook
+        getAllCars();
+    }, []); // Deja el array vacío para que solo se ejecute al montar
 
 
     return {

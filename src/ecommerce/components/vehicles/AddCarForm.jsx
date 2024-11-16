@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useCarService, useImageStore } from "../../../hooks";
 import Swal from "sweetalert2";
@@ -12,56 +12,67 @@ const AddCarForm = ({ car, onSave, onClose }) => {
     formState: { errors },
   } = useForm();
 
-  useEffect(() => {
-    if (car) {
-      // Prellenar el formulario con los datos del vehículo a editar
-      Object.keys(car).forEach((key) => setValue(key, car[key]));
-    } else {
-      reset(); // Limpia el formulario para un nuevo registro
-    }
-  }, [car, setValue, reset]);
-
   const { addCar, updateCarById, error } = useCarService();
   const { uploadImages, loading, error: imageError } = useImageStore();
 
-  const onSubmit = async (data) => {
-    // Subir las imágenes seleccionadas
-    const uploadedUrls = data.images?.length
-      ? await uploadImages(data.images)
-      : car?.image || []; // Usa imágenes existentes si no se suben nuevas
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    if (imageError || (!uploadedUrls.length && !car)) {
-      Swal.fire(
-        "Error",
-        imageError || "Debe subir al menos una imagen",
-        "error"
-      );
-      return;
+  useEffect(() => {
+    if (car) {
+      Object.keys(car).forEach((key) => setValue(key, car[key]));
+    } else {
+      reset();
     }
+  }, [car, setValue, reset]);
 
-    const newCar = { ...data, image: uploadedUrls };
 
+
+  const onSubmit = async (data) => {
+    if (isSubmitting) return;
+
+    // Subir las imágenes seleccionadas
+    setIsSubmitting(true);
     try {
+      // Subir imágenes si se proporcionaron
+      const uploadedUrls = data.images?.length
+        ? await uploadImages(data.images)
+        : car?.image || []; // Usa imágenes existentes si no hay nuevas
+
+      if (imageError || (!uploadedUrls.length && !car)) {
+        Swal.fire(
+          "Error",
+          imageError || "Debe subir al menos una imagen",
+          "error"
+        );
+        return;
+      }
+
+      const newCar = { ...data, image: uploadedUrls };
+
       let savedCar;
       if (car) {
-        // Actualiza un vehículo existente
         savedCar = await updateCarById(car._id, newCar);
         Swal.fire("Éxito", "Vehículo actualizado correctamente", "success");
       } else {
-        // Agrega un nuevo vehículo
         savedCar = await addCar(newCar);
         Swal.fire("Éxito", "Vehículo agregado correctamente", "success");
       }
 
-      onSave(savedCar); // Actualiza la lista de vehículos
-      onClose(); // Cierra el modal
+      onSave(savedCar); // Emitir el vehículo actualizado
+      onClose(); // Cerrar modal
     } catch (error) {
       Swal.fire("Error", "Hubo un problema al guardar el vehículo", "error");
+    } finally {
+      setIsSubmitting(false);
+      reset(); // Limpia el formulario después de guardar
     }
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-lg max-w-4xl mx-auto border-4 border-gray-300">
+    <div
+      className="bg-white p-6 rounded-lg shadow-lg max-w-4xl w-full border-4 border-gray-300"
+      style={{ maxHeight: "90vh", overflowY: "auto" }}
+    >
       <h2 className="text-2xl font-bold mb-4 text-center text-gray-800">
         {car ? "Editar Vehículo" : "Agregar Nuevo Vehículo"}
       </h2>
@@ -398,13 +409,13 @@ const AddCarForm = ({ car, onSave, onClose }) => {
           <button
             type="submit"
             className="bg-black text-white px-6 py-2 rounded-md font-semibold hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            disabled={loading}
+            disabled={isSubmitting}
           >
-            {loading
+            {isSubmitting
               ? "Guardando..."
               : car
               ? "Guardar Cambios"
-              : "Agregar Vehículo"}
+              : "Agregar Vehículo"}{" "}
           </button>
         </div>
       </form>

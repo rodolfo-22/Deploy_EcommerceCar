@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import AddCarForm from "./AddCarForm";
 
-const VehiclesMain = ({ cars, deleteCar, setCars }) => {
+const VehiclesMain = ({ cars, deleteCar, refreshCars }) => {
   const [showModal, setShowModal] = useState(false);
   const [currentCar, setCurrentCar] = useState(null);
 
   const openModal = (car = null) => {
-    setCurrentCar(car); // Si se proporciona un vehículo, se usará para edición
+    setCurrentCar(car);
     setShowModal(true);
   };
 
   const closeModal = () => {
-    setCurrentCar(null); // Limpia el vehículo actual al cerrar el modal
+    setCurrentCar(null);
     setShowModal(false);
   };
 
@@ -57,15 +57,10 @@ const VehiclesMain = ({ cars, deleteCar, setCars }) => {
               <AddCarForm
                 car={currentCar}
                 onClose={closeModal}
-                onSave={(savedCar) => {
-                  setCars((prevCars) =>
-                    savedCar._id
-                      ? prevCars.map((car) =>
-                          car._id === savedCar._id ? savedCar : car
-                        )
-                      : [...prevCars, savedCar]
-                  );
-                }} // Aquí pasamos correctamente `onSave`
+                onSave={async () => {
+                  await refreshCars(); // Refresca los datos después de guardar
+                  closeModal();
+                }}
               />
             </div>
           </div>
@@ -82,31 +77,32 @@ const VehiclesMain = ({ cars, deleteCar, setCars }) => {
             </tr>
           </thead>
           <tbody>
-            {cars.map((car) => (
-              <tr
-                key={car._id}
-                className="border-b border-gray-200 text-gray-800"
-              >
-                <td className="px-4 py-2">{car.manufacturer}</td>
-                <td className="px-4 py-2">{car.model}</td>
-                <td className="px-4 py-2">{car.year}</td>
-                <td className="px-4 py-2">{car.status}</td>
-                <td className="px-4 py-2 flex justify-center space-x-2">
-                  <button
-                    onClick={() => openModal(car)}
-                    className="text-blue-500 hover:underline"
-                  >
-                    ✏️
-                  </button>
-                  <button
-                    onClick={() => deleteCar(car._id)}
-                    className="text-red-500 hover:underline"
-                  >
-                    🗑️
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {Array.isArray(cars) &&
+              cars.map((car) => (
+                <tr
+                  key={car._id}
+                  className="border-b border-gray-200 text-gray-800"
+                >
+                  <td className="px-4 py-2">{car.manufacturer}</td>
+                  <td className="px-4 py-2">{car.model}</td>
+                  <td className="px-4 py-2">{car.year}</td>
+                  <td className="px-4 py-2">{car.status}</td>
+                  <td className="px-4 py-2 flex justify-center space-x-2">
+                    <button
+                      onClick={() => openModal(car)}
+                      className="text-blue-500 hover:underline"
+                    >
+                      ✏️
+                    </button>
+                    <button
+                      onClick={() => deleteCar(car._id)}
+                      className="text-red-500 hover:underline"
+                    >
+                      🗑️
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
