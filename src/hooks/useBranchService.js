@@ -33,6 +33,7 @@ export const useBranchService = () => {
 };
 
 
+
   useEffect(() => {
     getAllBranchs(); // Llama al método al montar el componente
   }, []);

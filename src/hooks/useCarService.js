@@ -40,6 +40,15 @@ export const useCarService = () => {
         }
     };
 
+    const getCarsByBranch = async (branchId) => {
+        try {
+            const response = await EcommerApi.get(`/stores/${branchId}`);
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    };
+
     const deleteCarById = async (id) => {
         try {
             await EcommerApi.delete(`/products/${id}`);
@@ -77,6 +86,7 @@ export const useCarService = () => {
         addCar,
         getAllCars,
         getCarById,
+        getCarsByBranch,
         deleteCarById,
         updateCarById,
     };
