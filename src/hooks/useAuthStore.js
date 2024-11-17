@@ -36,7 +36,10 @@ export const useAuthStore = () => {
 
     const startRegister = async ({ username, email, password }) => {
         try {
-            const { data } = await EcommerApi.post('/users/register', { username, email, password });
+            const { data } = await EcommerApi.post('/users/register', { 
+                username, email, password, 
+                role: 'seller'
+                });
 
             // Verifica si el registro fue exitoso
             if (data && data._id) {
