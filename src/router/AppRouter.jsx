@@ -29,7 +29,7 @@ if (status === "checking") {
       {status === "not-authenticated" ? (
         // Rutas públicas,
         <>
-          <Route path="/" element={<MainPage/>} />
+          <Route path="/" element={<MainPage />} />
           <Route path="/login" element={<LoginPage setUser={setUser} />} />
           <Route path="/car/:id" element={<CarDetail />} />
           <Route path="*" element={<Navigate to="/" />} />
@@ -39,7 +39,7 @@ if (status === "checking") {
           {/* Ruta para usuarios autenticados */}
 
           {/* Rutas para usuario con rol "user" */}
-          {user.role === "user" ? (
+          {user.role === "seller" ? (
             <>
               <Route path="/vendedor" element={<SellerPage />} />
               <Route path="*" element={<Navigate to="/vendedor" />} />
@@ -49,10 +49,7 @@ if (status === "checking") {
           {/* Rutas para administrador */}
           {user.role === "admin" ? (
             <>
-              <Route
-                path="/admin"
-                element={<AdminPage />}
-              />
+              <Route path="/admin" element={<AdminPage />} />
               <Route path="/admin/register" element={<RegisterPage />} />
               <Route
                 path="/admin/edit-car/:id"

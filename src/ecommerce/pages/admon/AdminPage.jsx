@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { HeaderLogin, VehiclesMain } from "../../components";
+import { VehiclesMain, EmployeesMain } from "../../components";
 import { useAuthStore } from "../../../hooks"; 
 import { useCarService } from "../../../hooks";
 import profileImage from "../../../assets/profile.png";
-import EmployeesMain from "../../components/employees/EmployeesMain";
 
 const AdminPage = () => {
   const { cars, loading, error, deleteCarById, getAllCars } = useCarService();
@@ -60,7 +59,7 @@ const AdminPage = () => {
               </Link>
             </div>
             <div onClick={() => setSelectedComponent(2)}>
-              <Link to="#" className="block py-2 text-xl">
+              <Link to="/admin" className="block py-2 text-xl">
                 Administrar empleados
               </Link>
             </div>
@@ -97,8 +96,7 @@ const AdminPage = () => {
             refreshCars={refreshCars}
           />
         )}
-        {selectedComponent === 2 && <div>Administrar empleados</div>}
-
+        {selectedComponent === 2 && <EmployeesMain />}
         {selectedComponent === 3 && <div>Sucursales de venta</div>}
         {selectedComponent === 4 && <div>Asistir cotizaciones</div>}
       </div>
