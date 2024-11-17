@@ -6,5 +6,6 @@ export {default as Footer} from './Footer';
 export {default as Header} from './Header';
 export {default as HeaderLogin} from './HeaderLogin';
 export {default as VehiclesMain} from './vehicles/VehiclesMain';
+export {default as VehiclesByBranch} from './vehicles/VehiclesByBranch';
 export {default as EmployeesMain} from './employees/EmployeesMain';
 export {default as BranchMain} from './branchOffice/BranchMain';
