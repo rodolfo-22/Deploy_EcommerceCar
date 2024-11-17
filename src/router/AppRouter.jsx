@@ -3,7 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
 import LoginPage from "../auth/LoginPage";
 import { MainPage, AdminPage, RegisterPage, SellerPage } from "../ecommerce/pages";
-import { CarDetail, AddCarForm, EditCarForm } from "../ecommerce/components";
+import { CarDetail, EditCarForm } from "../ecommerce/components";
 import { HashLoader } from "react-spinners";
 
 const AppRouter = ({ setUser }) => {
@@ -29,7 +29,7 @@ if (status === "checking") {
       {status === "not-authenticated" ? (
         // Rutas públicas,
         <>
-          <Route path="/" element={<MainPage/>} />
+          <Route path="/" element={<MainPage />} />
           <Route path="/login" element={<LoginPage setUser={setUser} />} />
           <Route path="/car/:id" element={<CarDetail />} />
           <Route path="*" element={<Navigate to="/" />} />
@@ -39,7 +39,7 @@ if (status === "checking") {
           {/* Ruta para usuarios autenticados */}
 
           {/* Rutas para usuario con rol "user" */}
-          {user.role === "user" ? (
+          {user.role === "seller" ? (
             <>
               <Route path="/vendedor" element={<SellerPage />} />
               <Route path="*" element={<Navigate to="/vendedor" />} />
@@ -49,17 +49,8 @@ if (status === "checking") {
           {/* Rutas para administrador */}
           {user.role === "admin" ? (
             <>
-              <Route
-                path="/admin"
-                element={<AdminPage />}
-              />
+              <Route path="/admin" element={<AdminPage />} />
               <Route path="/admin/register" element={<RegisterPage />} />
-              <Route
-                path="/admin/add-car"
-                element={
-                  <AddCarForm addCar={(newCar) => setCars([...cars, newCar])} />
-                }
-              />
               <Route
                 path="/admin/edit-car/:id"
                 element={
