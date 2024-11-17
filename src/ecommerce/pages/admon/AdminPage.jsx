@@ -4,6 +4,7 @@ import { HeaderLogin, VehiclesMain } from "../../components";
 import { useAuthStore } from "../../../hooks"; 
 import { useCarService } from "../../../hooks";
 import profileImage from "../../../assets/profile.png";
+import EmployeesMain from "../../components/employees/EmployeesMain";
 
 const AdminPage = () => {
   const { cars, loading, error, deleteCarById, getAllCars } = useCarService();
@@ -97,6 +98,7 @@ const AdminPage = () => {
           />
         )}
         {selectedComponent === 2 && <div>Administrar empleados</div>}
+
         {selectedComponent === 3 && <div>Sucursales de venta</div>}
         {selectedComponent === 4 && <div>Asistir cotizaciones</div>}
       </div>
