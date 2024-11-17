@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from "react";
+import hondaImage from "../../assets/honda14.jpg"
+import mercedezImage from "../../assets/mercedez.jpg"
+import toyotaImage from "../../assets/toyota.webp"
+
 
 const Carousel = () => {
   const images = [
-    "/img1.jpg", 
-    "/img2.jpg",
-    "/img3.jpg",
+    //"/img1.jpg", 
+    //"/img2.jpg",
+    hondaImage,
+    mercedezImage,
+    toyotaImage
+    // "/img3.jpg",
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);

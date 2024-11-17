@@ -21,7 +21,7 @@ const CardView = ({ car }) => {
         loading="lazy"
       />
       <h3
-        className="text-xl font-raleway font-bold text-[#00BCD4]"
+        className="text-xl font-raleway font-bold text-white"
         aria-label={`Modelo ${car.model}`}
       >
         {car.model}

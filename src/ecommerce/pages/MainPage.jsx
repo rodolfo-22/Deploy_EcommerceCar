@@ -5,6 +5,7 @@ import { useCarService } from "../../hooks";
 import bgImage from "../../assets/bg-request.png";
 import postRequest from '../../services/requestService'
 import Swal from 'sweetalert2'
+import { ShoppingBagIcon, WrenchScrewdriverIcon, CreditCardIcon, TruckIcon } from "@heroicons/react/24/solid";
 
 const MainPage = () => {
 
@@ -61,18 +62,46 @@ const MainPage = () => {
     <div className="bg-[#121212] min-h-screen text-white">
       <Header />
       <Carousel />
-
-      {/* Sección Estilo "El carro perfecto para ti" */}
-      <section className="bg-[#2D2D2D] py-16 px-8 text-center text-white">
-        <div className="max-w-2xl mx-auto">
-          <h2 className="text-4xl font-bold mb-4">El carro perfecto para ti</h2>
-          <p className="text-lg mb-8">
-            En todas las marcas y modelos de carros nuevos, híbridos, usados y
-            de trabajo
+      <section className="bg-[#2D2D2D] py-16 px-8 text-center text-white flex flex-col">
+        <div className="max-w-4xl mx-auto mb-12">
+          <h2 className="text-5xl font-bold mb-4">Explora nuestros servicios y vehículos</h2>
+          <p className="text-lg mb-4">
+            Ofrecemos soluciones integrales para la compra, renta y mantenimiento de autos.
           </p>
-          <button className="bg-white text-[#00BCD4] font-semibold px-6 py-2 rounded-full shadow-md hover:bg-gray-100 transition duration-300">
-            Conoce más <span className="ml-2">→</span>
-          </button>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* Card 1: Compra de vehículos */}
+          <div className="bg-black p-6 rounded-lg shadow-lg flex flex-col items-center">
+            <ShoppingBagIcon className="w-12 h-12 text-[#00BCD4] mb-4" />
+            <h3 className="text-xl font-bold mb-2">Compra de Vehículos</h3>
+            <p className="text-gray-400 text-sm">
+              Encuentra el auto ideal para ti. Contamos con todas las marcas y modelos disponibles.
+            </p>
+          </div>
+          {/* Card 2: Renta de vehículos */}
+          <div className="bg-black p-6 rounded-lg shadow-lg flex flex-col items-center">
+            <TruckIcon className="w-12 h-12 text-[#00BCD4] mb-4" />
+            <h3 className="text-xl font-bold mb-2">Renta de Vehículos</h3>
+            <p className="text-gray-400 text-sm">
+              Renta autos por día, semana o mes. Ideal para viajes, eventos o negocios.
+            </p>
+          </div>
+          {/* Card 3: Financiamiento */}
+          <div className="bg-black p-6 rounded-lg shadow-lg flex flex-col items-center">
+            <CreditCardIcon className="w-12 h-12 text-[#00BCD4] mb-4" />
+            <h3 className="text-xl font-bold mb-2">Financiamiento</h3>
+            <p className="text-gray-400 text-sm">
+              Ofrecemos planes flexibles de financiamiento para que adquieras tu auto sin preocupaciones.
+            </p>
+          </div>
+          {/* Card 4: Mantenimiento */}
+          <div className="bg-black p-6 rounded-lg shadow-lg flex flex-col items-center">
+            <WrenchScrewdriverIcon className="w-12 h-12 text-[#00BCD4] mb-4" />
+            <h3 className="text-xl font-bold mb-2">Mantenimiento</h3>
+            <p className="text-gray-400 text-sm">
+              Mantén tu vehículo en óptimas condiciones con nuestro servicio de mantenimiento especializado.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -91,14 +120,14 @@ const MainPage = () => {
         <div className="flex justify-center items-center">
           <h2
             id="our-vehicles"
-            className="text-5xl font-raleway font-bold text-[#00BCD4] py-4 px-6 inline-flex items-center"
+            className="text-5xl font-raleway font-bold text-white py-4 px-6 inline-flex items-center mb-4"
           >
-            <FaCar className="mr-4" size={36} /> Nuestra Selección
+            <FaCar className="mr-4" size={36} /> Nuestra selección
           </h2>
         </div>
 
         {!loading && !error && cars.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 mt-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 mt-6 m-10">
             {cars.map((car) => (
               <div
                 key={car._id}
@@ -119,14 +148,14 @@ const MainPage = () => {
       </section>
 
       <section className="bg-cover py-64 px-8 flex justify-end" style={{ backgroundImage: `url(${bgImage})` }}>
-        <div className="flex flex-col">
+        <div className="flex flex-col mr-10">
           <div className="mb-8 max-w-xl mx-auto">
             <p className="text-4xl font-bold text-white leading-snug text-start drop-shadow-lg">Soluciones personalizadas, atención impecable y vehículos que se ajustan a tus necesidades y estilo de vida.</p>
           </div>
-          <div className="p-8 bg-opacity-60 bg-[#525252] rounded-lg max-w-xl mx-auto">
+          <div className="p-8 bg-opacity-50 bg-black rounded-lg max-w-xl mx-auto">
             <h2 className="text-xl font-bold mb-4 text-start">Cotiza tu vehículo</h2>
             <p className="text-lg">
-              No dudes en adquirir el auto de tus sueños. Para cotizarlo, ingresa tus datos:
+              Registra tus datos y un agente se contactará contigo
             </p>
             <form onSubmit={sendRequest} className="max-w-xl mx-auto">
               <div className="grid grid-cols-1 sm:grid-cols-2 py-8 gap-6">
