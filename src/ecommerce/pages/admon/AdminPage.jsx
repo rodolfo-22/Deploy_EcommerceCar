@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { VehiclesMain, EmployeesMain } from "../../components";
+import { VehiclesMain, EmployeesMain, BranchMain } from "../../components";
 import { useAuthStore } from "../../../hooks"; 
 import { useCarService } from "../../../hooks";
 import profileImage from "../../../assets/profile.png";
@@ -68,11 +68,6 @@ const AdminPage = () => {
                 Sucursales de venta
               </Link>
             </div>
-            <div onClick={() => setSelectedComponent(4)}>
-              <Link to="#" className="block py-2 text-xl">
-                Asistir cotizaciones
-              </Link>
-            </div>
           </div>
         </div>
 
@@ -97,7 +92,7 @@ const AdminPage = () => {
           />
         )}
         {selectedComponent === 2 && <EmployeesMain />}
-        {selectedComponent === 3 && <div>Sucursales de venta</div>}
+        {selectedComponent === 3 && <BranchMain />}
         {selectedComponent === 4 && <div>Asistir cotizaciones</div>}
       </div>
     </div>
