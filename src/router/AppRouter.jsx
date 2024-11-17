@@ -3,7 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
 import LoginPage from "../auth/LoginPage";
 import { MainPage, AdminPage, RegisterPage, SellerPage } from "../ecommerce/pages";
-import { CarDetail, AddCarForm, EditCarForm } from "../ecommerce/components";
+import { CarDetail, EditCarForm } from "../ecommerce/components";
 import { HashLoader } from "react-spinners";
 
 const AppRouter = ({ setUser }) => {
@@ -54,12 +54,6 @@ if (status === "checking") {
                 element={<AdminPage />}
               />
               <Route path="/admin/register" element={<RegisterPage />} />
-              <Route
-                path="/admin/add-car"
-                element={
-                  <AddCarForm addCar={(newCar) => setCars([...cars, newCar])} />
-                }
-              />
               <Route
                 path="/admin/edit-car/:id"
                 element={
