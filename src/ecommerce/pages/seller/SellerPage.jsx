@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { VehiclesByBranch } from "../../components";
+import { VehiclesByBranch, CheckQuote } from "../../components";
 import { useAuthStore } from "../../../hooks";
-import { useCarService } from "../../../hooks";
 import profileImage from "../../../assets/profile.png";
 
 const AdminPage = () => {
@@ -42,11 +41,6 @@ const AdminPage = () => {
                 Vehiculos por sucursal
               </Link>
             </div>
-            <div onClick={() => setSelectedComponent(4)}>
-              <Link to="#" className="block py-2 text-xl">
-                Gestion de contratos
-              </Link>
-            </div>
           </div>
         </div>
         {/* Botón de cerrar sesión */}
@@ -62,10 +56,9 @@ const AdminPage = () => {
 
       {/* Content */}
       <div className="w-5/6 overflow-y-auto">
-        {selectedComponent === 1 && <div>Asistir cotizaciones</div>}
+        {selectedComponent === 1 && <CheckQuote />}
         {selectedComponent === 2 && <div>Asistir cotizaciones</div>}
         {selectedComponent === 3 && <VehiclesByBranch />}
-        {selectedComponent === 4 && <div>Asistir cotizaciones</div>}
       </div>
     </div>
   );
