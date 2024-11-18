@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { VehiclesByBranch, CheckQuote } from "../../components";
+import { VehiclesByBranch, CheckQuote, LoanMain } from "../../components";
 import { useAuthStore } from "../../../hooks";
-import profileImage from "../../../assets/profile.png";
+import profileImage from "../../../assets/seller1.jpg";
 
 const AdminPage = () => {
   const { startLogout, user } = useAuthStore();
   const [selectedComponent, setSelectedComponent] = useState(1); 
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen font-sans">
       {/* Sidebar */}
       <div className="bg-gray-950 text-white p-4 w-1/6 flex flex-col justify-between">
         {/* Información del usuario */}
@@ -55,9 +55,9 @@ const AdminPage = () => {
       </div>
 
       {/* Content */}
-      <div className="w-5/6 overflow-y-auto">
+      <div className="w-5/6 overflow-y-auto ">
         {selectedComponent === 1 && <CheckQuote />}
-        {selectedComponent === 2 && <div>Asistir cotizaciones</div>}
+        {selectedComponent === 2 && <LoanMain />}
         {selectedComponent === 3 && <VehiclesByBranch />}
       </div>
     </div>

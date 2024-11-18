@@ -6,3 +6,4 @@ export * from './useCarService';
 export * from './useEmployeesService';
 export * from './useBranchService';
 export * from './useQuoteService';
+export * from './useLoanService';

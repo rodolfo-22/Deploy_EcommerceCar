@@ -10,3 +10,4 @@ export {default as VehiclesByBranch} from './vehicles/VehiclesByBranch';
 export {default as EmployeesMain} from './employees/EmployeesMain';
 export {default as BranchMain} from './branchOffice/BranchMain';
 export {default as CheckQuote} from './qouteSeller/CheckQuote';
+export {default as LoanMain} from './loan/LoanMain';
