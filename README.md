@@ -4,6 +4,21 @@ CarConnect es un proyecto innovador diseñado para facilitar la compra y venta d
 
 ---
 
+## 📑 Tabla de Contenidos
+1. [📝 Sobre el Proyecto](#-sobre-el-proyecto)
+2. [🌟 Características Principales](#-características-principales)
+3. [🛠️ Construido Con](#️-construido-con)
+4. [⚙️ Requisitos Previos](#️-requisitos-previos)
+5. [🚀 Instalación](#-instalación)
+6. [📚 Uso](#-uso)
+7. [🧪 Usuarios Testing](#-usuarios-testing)
+8. [🤝 Contribuciones](#-contribuciones)
+9. [🧑‍💻 Desarrolladores](#-desarrolladores)
+10. [📜 Licencia](#-licencia)
+11. [📧 Contacto](#-contacto)
+
+---
+
 ## 📝 Sobre el Proyecto
 
 - **Objetivo del Cliente:** Facilitar la compra de vehículos de manera segura, eficiente y personalizada.
@@ -74,6 +89,32 @@ Sigue los pasos para configurar el proyecto localmente:
 
 ---
 
+## 🧪 Usuarios Testing
+
+Este espacio está reservado para usuarios que deseen probar el sistema y brindar retroalimentación. Las pruebas incluyen:
+
+- Flujo de registro e inicio de sesión.
+- Exploración de vehículos y envío de cotizaciones.
+- Simulación de roles como administrador, vendedor y cliente.
+1. Usuario con rol administrador:
+   ```bash
+   testadmin@carconnect.com
+   ```
+   Contraseña de administrador:
+   ```bash
+   Test1234 
+   ```
+2. Usuario con rol vendedor:
+   ```bash
+   testseller@carconnect.com
+   ```
+   Contraseña de vendedor:
+   ```bash
+   Test1234 
+   ```
+
+---
+
 ## 🤝 Contribuciones
 
 Las contribuciones son bienvenidas. Sigue estos pasos:
@@ -106,4 +147,3 @@ Las contribuciones son bienvenidas. Sigue estos pasos:
 ## 📧 Contacto
 
 Rodolfo Rafael Garcia Castillo - [00082421@uca.edu.sv](mailto:00082421@uca.edu.sv)
-
