@@ -1,0 +1,13 @@
+export {default as CarDetail} from './CarDetail';
+export {default as CardView} from './CardView';
+export {default as Carousel} from './Carousel';
+export {default as EditCarForm} from './EditCarForm';
+export {default as Footer} from './Footer';
+export {default as Header} from './Header';
+export {default as HeaderLogin} from './HeaderLogin';
+export {default as VehiclesMain} from './vehicles/VehiclesMain';
+export {default as VehiclesByBranch} from './vehicles/VehiclesByBranch';
+export {default as EmployeesMain} from './employees/EmployeesMain';
+export {default as BranchMain} from './branchOffice/BranchMain';
+export {default as CheckQuote} from './qouteSeller/CheckQuote';
+export {default as LoanMain} from './loan/LoanMain';

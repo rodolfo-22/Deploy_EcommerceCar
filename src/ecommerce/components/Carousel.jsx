@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from "react";
+import hondaImage from "../../assets/honda14.jpg"
+import mercedezImage from "../../assets/mercedez.jpg"
+import toyotaImage from "../../assets/toyota.webp"
+
 
 const Carousel = () => {
   const images = [
-    "/img1.jpg", // Asegúrate de poner las rutas correctas de tus imágenes aquí
-    "/img2.jpg",
-    "/img3.jpg",
+    //"/img1.jpg", 
+    //"/img2.jpg",
+    hondaImage,
+    mercedezImage,
+    toyotaImage
+    // "/img3.jpg",
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -15,43 +22,47 @@ const Carousel = () => {
       goToNext();
     };
 
-    const interval = setInterval(handleAutoPlay, 2000); // Cambiar cada 3 segundos
+    const interval = setInterval(handleAutoPlay, 4000);
     return () => {
-      clearInterval(interval); // Limpiar intervalo para evitar duplicados
+      clearInterval(interval); 
     };
-  }, [currentIndex]); // Dependencia en el currentIndex para actualizarse correctamente
+  }, [currentIndex]);
 
   const goToPrevious = () => {
     const isFirstSlide = currentIndex === 0;
     const newIndex = isFirstSlide ? images.length - 1 : currentIndex - 1;
     setCurrentIndex(newIndex);
-    setAutoPlay(false); // Detener autoplay al interactuar manualmente
+    setAutoPlay(false);
   };
 
   const goToNext = () => {
     const isLastSlide = currentIndex === images.length - 1;
     const newIndex = isLastSlide ? 0 : currentIndex + 1;
     setCurrentIndex(newIndex);
-    setAutoPlay(false); // Detener autoplay al interactuar manualmente
+    setAutoPlay(false);
   };
 
   const goToSlide = (index) => {
     setCurrentIndex(index);
-    setAutoPlay(false); // Detener autoplay al interactuar manualmente
+    setAutoPlay(false);
   };
 
   return (
-    <div className="relative w-full h-[60vh] max-w-full">
-      {/* Imágenes del carrusel */}
-      <div className="w-full h-full overflow-hidden">
-        <img
-          src={images[currentIndex]}
-          alt="Slide"
-          className="w-full h-full object-cover transition-opacity duration-500"
-        />
+    <div className="relative w-full h-screen max-w-full overflow-hidden">
+      {/* puse efecto de desvanecimiento a este contenedor, recordatorio por si acaso*/}
+      <div className="w-full h-full relative">
+        {images.map((image, index) => (
+          <img
+            key={index}
+            src={image}
+            alt={`Slide ${index + 1}`}
+            className={`w-full h-full object-cover absolute top-0 left-0 transition-opacity duration-1000 ease-in-out ${
+              index === currentIndex ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        ))}
       </div>
 
-      {/* Botón izquierda */}
       <button
         className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full"
         onClick={goToPrevious}
@@ -59,7 +70,6 @@ const Carousel = () => {
         &#10094;
       </button>
 
-      {/* Botón derecha */}
       <button
         className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full"
         onClick={goToNext}
@@ -67,13 +77,12 @@ const Carousel = () => {
         &#10095;
       </button>
 
-      {/* Indicadores de imágenes */}
-      <div className="flex justify-center mt-2">
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
         {images.map((_, index) => (
           <button
             key={index}
             onClick={() => goToSlide(index)}
-            className={`w-3 h-3 mx-2 rounded-full ${
+            className={`w-3 h-3 rounded-full ${
               index === currentIndex ? "bg-red-500" : "bg-gray-300"
             }`}
           ></button>
