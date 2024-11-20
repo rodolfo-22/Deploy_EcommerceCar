@@ -17,16 +17,17 @@ export const useCarService = () => {
     };
 
     const getAllCars = async () => {
-        setLoading(true);
+        setLoading(true); // Indicamos que está cargando
         try {
             const response = await EcommerApi.get("/products");
-            setCars(Array.isArray(response.data) ? response.data : []); // Asegura que cars sea un arreglo
-            setError(null); // Limpia cualquier error previo
+            setCars(response.data || []); // Establece los carros en el estado
+            return response.data; // Devuelve los datos por si necesitas usarlos
         } catch (error) {
             setError(error.response?.data?.message || "Error al obtener los carros");
-            setCars([]); // Establece cars como un arreglo vacío en caso de error
+            setCars([]); // Vacía el estado en caso de error
+            throw error; // Lanza el error
         } finally {
-            setLoading(false); // Asegúrate de que loading se establece en false al final
+            setLoading(false); // Finaliza la carga
         }
     };
 
@@ -41,11 +42,15 @@ export const useCarService = () => {
     };
 
     const getCarsByBranch = async (branchId) => {
+        setLoading(true); // Indicamos que está cargando
         try {
             const response = await EcommerApi.get(`/stores/${branchId}`);
-            return response;
+            return response; // Devuelve los datos de la sucursal
         } catch (error) {
+            setError(error.response?.data?.message || "Error al obtener los vehículos de la sucursal");
             throw error;
+        } finally {
+            setLoading(false); // Finaliza la carga
         }
     };
 
@@ -72,11 +77,12 @@ export const useCarService = () => {
         }
     };
 
-    // Efecto para cargar todos los carros automáticamente cuando se monta el hook
     useEffect(() => {
         // Llama a getAllCars cuando se monta el hook
-        getAllCars();
-    }, []); // Deja el array vacío para que solo se ejecute al montar
+        (async () => {
+            await getAllCars(); // Carga los carros al montar el hook
+        })();
+    }, []);
 
 
     return {

@@ -1,41 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { mdiOfficeBuilding, mdiAccountGroup, mdiCar, mdiLogout } from "@mdi/js";
 import Icon from "@mdi/react";
 import { Link } from "react-router-dom";
 import { VehiclesMain, EmployeesMain, BranchMain } from "../../components";
 import { useAuthStore } from "../../../hooks"; 
-import { useCarService } from "../../../hooks";
 import profileImage from "../../../assets/profile.png";
 
 const AdminPage = () => {
-  const { cars, loading, error, deleteCarById, getAllCars } = useCarService();
   const { startLogout, user } = useAuthStore();
   const [selectedComponent, setSelectedComponent] = useState(1);
-
-  // Función para sincronizar los carros después de cualquier operación
-  const refreshCars = async () => {
-    try {
-      await getAllCars(); // Refresca los datos globales del hook
-    } catch (err) {
-      console.error("Error al actualizar los vehículos:", err);
-    }
-  };
-
-    useEffect(() => {
-      refreshCars(); // Cargar los datos iniciales
-    }, []);
-
-  const deleteCar = async (id) => {
-    try {
-      await deleteCarById(id);
-      refreshCars(); // Refresca la lista después de eliminar
-    } catch (err) {
-      console.error("Error al eliminar el vehículo:", err);
-    }
-  };
-
-  if (loading) return <div>Cargando vehículos...</div>;
-  if (error) return <div>{error}</div>;
 
   return (
     <div className="flex h-screen">
@@ -108,13 +81,7 @@ const AdminPage = () => {
 
       {/* Content */}
       <div className="w-5/6 overflow-y-auto">
-        {selectedComponent === 1 && (
-          <VehiclesMain
-            cars={cars}
-            deleteCar={deleteCar}
-            refreshCars={refreshCars}
-          />
-        )}
+        {selectedComponent === 1 && <VehiclesMain/>}
         {selectedComponent === 2 && <EmployeesMain />}
         {selectedComponent === 3 && <BranchMain />}
         {selectedComponent === 4 && <div>Asistir cotizaciones</div>}

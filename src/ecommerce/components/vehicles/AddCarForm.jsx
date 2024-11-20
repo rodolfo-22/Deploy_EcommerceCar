@@ -90,16 +90,7 @@ const AddCarForm = ({ car, onSave, onClose }) => {
           {/* Campos del formulario */}
           {/* Seleccione la sucursal */}
           <div className="md:col-span-1">
-            <label className="block text-sm font-semibold text-gray-600">
-              Seleccione la sucursal
-            </label>
-            <select
-              id="sucursal"
-              className="border border-gray-300 w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">Seleccionar</option>
-              {/* Agrega opciones aquí */}
-            </select>
+
           </div>
           <div></div>
           <div></div>
@@ -459,8 +450,8 @@ const AddCarForm = ({ car, onSave, onClose }) => {
               Alcance: rango de combustible
             </label>
             <input
-              type="text"
-              placeholder="20 km por galón"
+              type="number"
+              placeholder="20 "
               {...register("fuelRange", {
                 required: "Este campo es obligatorio",
               })}
@@ -477,8 +468,8 @@ const AddCarForm = ({ car, onSave, onClose }) => {
               Peso del vehiculo en Kilogramos
             </label>
             <input
-              type="text"
-              placeholder="150 kg"
+              type="number"
+              placeholder="150 "
               {...register("weight", {
                 required: "Este campo es obligatorio",
               })}
@@ -492,11 +483,11 @@ const AddCarForm = ({ car, onSave, onClose }) => {
           </div>
           <div>
             <label className="block text-sm font-semibold text-gray-600">
-              Longitud en centimetros
+              Longitud de rueda
             </label>
             <input
-              type="text"
-              placeholder="360 cm"
+              type="number"
+              placeholder="16"
               {...register("wheel_length", {
                 required: "Este campo es obligatorio",
               })}
