@@ -62,167 +62,56 @@ const CarDetail = () => {
 
   return (
     <div>
-      <div className="bg-cover bg-center h-screen flex flex-row justify-center" style={{ backgroundImage: `url(${carDetails})` }}>
-        {/* <h2 className="text-2xl font-bold mb-4">{car.model}</h2> */}
+      <div className="bg-cover bg-center h-screen flex flex-row justify-center" style={{ backgroundImage: `url(${car.image[0]})` }}>
         <div className="h-screen flex flex-col justify-between w-full pb-20">
           <div className="pt-10">
-            <p className="text-6xl text-white text-center">Honda Civic</p>
+            <p className="text-6xl text-white text-center sm:text-5xl md:text-6xl">{car.manufacturer} {car.model}</p>
           </div>
-          <div className="flex flex-col">
-            <div className="flex justify-evenly text-white">
-              <div>
-                <p className="text-3xl ">Híbrido</p>
-                <p>Tipo de combustible</p>
-              </div>
-              <div>
-                <p className="text-3xl">Automático</p>
-                <p>Transmisión</p>
-              </div>
-              <div>
-                <p className="text-3xl">388 mi</p>
-                <p>Rendimiento del combustible</p>
-              </div>
-              <div >
-                <p className="text-3xl">2.0 litros</p>
-                <p>Cilindrada</p>
-              </div>
+          <div className="flex flex-col bg-black bg-opacity-50 text-black mr-4 ml-4 rounded-3xl pt-4 sm:bg-transparent sm:flex-row sm:justify-evenly sm:items-center">
+            <div className="text-center sm:text-left pb-6 sm:pb-0">
+              <p className="text-3xl text-white">{car.fuelType}</p>
+              <p className="text-white">Tipo de combustible</p>
             </div>
-            {/* <div className="pb-10 flex justify-center pt-20">
-            <p className="text-4xl text-white text-center">Desde $12,000</p>
-          </div> */}
+            <div className="text-center sm:text-left pb-6 sm:pb-0">
+              <p className="text-3xl text-white">{car.transmission}</p>
+              <p className="text-white">Transmisión</p>
+            </div>
+            <div className="text-center sm:text-left pb-6 sm:pb-0">
+              <p className="text-3xl text-white">{car.fuelRange}</p>
+              <p className="text-white">Rendimiento del combustible</p>
+            </div>
+            <div className="text-center sm:text-left pb-6 sm:pb-0">
+              <p className="text-3xl text-white">{car.engine}</p>
+              <p className="text-white">Cilindrada</p>
+            </div>
           </div>
 
-          {/* <img
-          src={carDetails}
-          // src={car.image[currentImageIndex]}
-          alt={`${car.model}`}
-          className="object-cover w-full h-full rounded-lg shadow-lg"
-        /> */}
-          {/* <button
-          onClick={handlePrevImage}
-          className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full"
-        >
-          &#10094;
-        </button>
-        <button
-          onClick={handleNextImage}
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full"
-        >
-          &#10095;
-        </button> */}
         </div>
-
-        {/* < div className="lg:w-1/5 w-full mt-6 lg:mt-0 lg:ml-6 flex flex-col justify-between">
-        <div>
-          <h3 className="text-2xl font-bold mb-4">Detalles:</h3>
-          <p>
-            Año: <span className="font-medium">{car.year}</span>
-          </p>
-          <p>
-            Combustible: <span className="font-medium">{car.fuelType}</span>
-          </p>
-          <p>
-            Precio: <span className="font-medium">{car.price}</span>
-          </p>
-        </div>
-        <button
-          onClick={handleQuoteVehicle}
-          className="bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition duration-200 mt-4 lg:mt-6"
-        >
-          Cotizar Vehículo
-        </button>
-      </div> */}
       </div>
-      {/* <div className="bg-black pl-8 pr-8">
-        <div className="text-white p-4">
-          <p className="text-3xl pt-4">Modelo y Specs</p>
-          <div className="pt-4">
-            <p className="text-2xl mb-2">Conducción</p>
-            <div className="flex gap-80">
-              <div>
-                <p className="text-gray-500">Combustible</p>
-                <p className="text-xl">Híbrido</p>
-              </div>
-              <div>
-                <p className="text-gray-500">Rango</p>
-                <p className="text-xl">277 mi</p>
-              </div>
-              <div>
-                <p className="text-gray-500">Aceleración</p>
-                <p className="text-xl">3.5 s 0-60 mph</p>
-              </div>
-              <div>
-                <p className="text-gray-500">Tracción</p>
-                <p className="text-xl">Delantera</p>
-              </div>
-            </div>
-          </div>
-          <div className="pt-6 pb-6">
-            <hr></hr>
-          </div>
-          <div className="">
-            <p className="text-2xl mb-2">Dimensiones</p>
-            <div className="flex gap-80">
-              <div>
-                <p className="text-gray-500">Peso</p>
-                <p className="text-xl">4398 lbs</p>
-              </div>
-              <div>
-                <p className="text-gray-500">Longitud de ruedas</p>
-                <p className="text-xl">21''</p>
-              </div>
-              <div>
-                <p className="text-gray-500">Asientos</p>
-                <p className="text-xl">5 adultos</p>
-              </div>
-            </div>
-          </div>
-          <div className="pt-6 pb-6">
-            <hr></hr>
-          </div>
-          <div className="">
-            <p className="text-2xl mb-2">Tecnología</p>
-            <div className="flex gap-80">
-              <div>
-                <p className="text-gray-500">Audio multimedia</p>
-                <p className="text-xl">Compatibilidad inalámbrica con Apple CarPlay® * y Android Auto™ *</p>
-              </div>
-              <div>
-                <p className="text-gray-500">Segurida</p>
-                <p className="text-xl">Honda Safety Sense™ 3.0 *</p>
-              </div>
-              <div className="pb-6">
-                <p className="text-gray-500">Conducción asistida</p>
-                <p className="text-xl">Sensity CDN</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
 
       <div className="bg-black pl-8 pr-8">
         <div className="text-white p-4">
           <p className="text-3xl pt-4 pb-4">Modelo y Specs</p>
 
           {/* Conducción Section */}
-          <div className="">
+          <div className="mb-6">
             <p className="text-2xl mb-2">Conducción</p>
-            <div className="grid grid-cols-4 gap-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               <div>
                 <p className="text-gray-500">Combustible</p>
-                <p className="text-xl">Híbrido</p>
+                <p className="text-xl">{car.fuelType}</p>
               </div>
               <div>
                 <p className="text-gray-500">Rango</p>
-                <p className="text-xl">277 mi</p>
+                <p className="text-xl">{car.fuelRange}</p>
               </div>
               <div>
                 <p className="text-gray-500">Aceleración</p>
-                <p className="text-xl">3.5 s 0-60 mph</p>
+                <p className="text-xl">{car.aceleration}</p>
               </div>
               <div>
                 <p className="text-gray-500">Tracción</p>
-                <p className="text-xl">Delantera</p>
+                <p className="text-xl">{car.driveTrain}</p>
               </div>
             </div>
           </div>
@@ -232,22 +121,21 @@ const CarDetail = () => {
           </div>
 
           {/* Dimensiones Section */}
-          <div className="">
+          <div className="mb-6">
             <p className="text-2xl mb-2">Dimensiones</p>
-            <div className="grid grid-cols-4 gap-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               <div>
                 <p className="text-gray-500">Peso</p>
-                <p className="text-xl">4398 lbs</p>
+                <p className="text-xl">{car.weight} lbs</p>
               </div>
               <div>
                 <p className="text-gray-500">Longitud de ruedas</p>
-                <p className="text-xl">21''</p>
+                <p className="text-xl">{car.wheel_length}''</p>
               </div>
               <div>
                 <p className="text-gray-500">Asientos</p>
-                <p className="text-xl">5 adultos</p>
+                <p className="text-xl">{car.seatingCapacity}</p>
               </div>
-              <div />
             </div>
           </div>
 
@@ -256,29 +144,27 @@ const CarDetail = () => {
           </div>
 
           {/* Tecnología Section */}
-          <div className="">
+          <div className="mb-6">
             <p className="text-2xl mb-2">Tecnología</p>
-            <div className="grid grid-cols-4 gap-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               <div>
                 <p className="text-gray-500">Audio multimedia</p>
                 <p className="text-xl">Compatibilidad inalámbrica con Apple CarPlay® * y Android Auto™ *</p>
               </div>
               <div>
                 <p className="text-gray-500">Seguridad</p>
-                <p className="text-xl">Honda Safety Sense™ 3.0 *</p>
+                <p className="text-xl">Safety Sense™ 3.0 *</p>
               </div>
               <div>
                 <p className="text-gray-500">Conducción asistida</p>
                 <p className="text-xl">Sensity CDN</p>
               </div>
-              <div />
             </div>
           </div>
         </div>
       </div>
-
-
     </div>
+
   );
 };
 

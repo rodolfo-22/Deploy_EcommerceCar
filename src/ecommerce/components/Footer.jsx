@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <footer className="bg-gradient-to-b from-[#121212] to-[#1F1F1F] text-white p-8 text-center">
 
-      <div className="border-t-4 border-[#00BCD4] mx-auto w-1/2 mb-6"></div>
+      <div className="border-t-4 border-[#286181] mx-auto w-1/2 mb-6"></div>
 
       <p className="text-sm font-poppins text-[#8C8C8C] mb-4">
         Las especificaciones, características, ilustraciones, colores y equipamientos mostrados están basados en la última información disponible. 
