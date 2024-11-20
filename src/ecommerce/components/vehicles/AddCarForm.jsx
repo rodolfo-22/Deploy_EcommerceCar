@@ -454,6 +454,78 @@ const AddCarForm = ({ car, onSave, onClose }) => {
               </span>
             )}
           </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-600">
+              Alcance: rango de combustible
+            </label>
+            <input
+              type="text"
+              placeholder="20 km por galón"
+              {...register("fuelRange", {
+                required: "Este campo es obligatorio",
+              })}
+              className="border border-gray-300 w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            {errors.fuelRange && (
+              <span className="text-red-500 text-sm">
+                {errors.fuelRange.message}
+              </span>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-600">
+              Peso del vehiculo en Kilogramos
+            </label>
+            <input
+              type="text"
+              placeholder="150 kg"
+              {...register("weight", {
+                required: "Este campo es obligatorio",
+              })}
+              className="border border-gray-300 w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            {errors.weight && (
+              <span className="text-red-500 text-sm">
+                {errors.weight.message}
+              </span>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-600">
+              Longitud en centimetros
+            </label>
+            <input
+              type="text"
+              placeholder="360 cm"
+              {...register("wheel_length", {
+                required: "Este campo es obligatorio",
+              })}
+              className="border border-gray-300 w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            {errors.wheel_length && (
+              <span className="text-red-500 text-sm">
+                {errors.wheel_length.message}
+              </span>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-600">
+              Aceleracion
+            </label>
+            <input
+              type="text"
+              placeholder="0-50 mph en 10s"
+              {...register("aceleration", {
+                required: "Este campo es obligatorio",
+              })}
+              className="border border-gray-300 w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            {errors.aceleration && (
+              <span className="text-red-500 text-sm">
+                {errors.aceleration.message}
+              </span>
+            )}
+          </div>
         </div>
         <div className="text-center mt-4">
           <button
