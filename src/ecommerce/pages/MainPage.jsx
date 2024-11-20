@@ -153,7 +153,7 @@ const MainPage = () => {
         <div className="max-w-4xl mx-auto mb-12">
           <h2 className="text-5xl font-bold mb-4">Explora nuestros servicios y vehículos</h2>
           <p className="text-lg mb-4">
-            Ofrecemos soluciones integrales para la compra, renta y mantenimiento de autos.
+            Ofrecemos soluciones integrales para la compra, renta y mantenimiento de autos
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -162,7 +162,7 @@ const MainPage = () => {
             <ShoppingBagIcon className="w-12 h-12 text-[#286181] mb-4" />
             <h3 className="text-xl font-bold mb-2">Compra de Vehículos</h3>
             <p className="text-gray-400 text-lg">
-              Encuentra el auto ideal para ti. Contamos con todas las marcas y modelos disponibles.
+              Encuentra el auto ideal para ti. Contamos con todas las marcas y modelos disponibles
             </p>
           </div>
           {/* Card 2: Renta de vehículos */}
@@ -170,7 +170,7 @@ const MainPage = () => {
             <TruckIcon className="w-12 h-12 text-[#286181] mb-4" />
             <h3 className="text-xl font-bold mb-2">Renta de Vehículos</h3>
             <p className="text-gray-400 text-lg">
-              Renta autos por día, semana o mes. Ideal para viajes, eventos o negocios.
+              Renta autos por día, semana o mes. Ideal para viajes, eventos o negocios
             </p>
           </div>
           {/* Card 3: Financiamiento */}
@@ -178,7 +178,7 @@ const MainPage = () => {
             <CreditCardIcon className="w-12 h-12 text-[#286181] mb-4" />
             <h3 className="text-xl font-bold mb-2">Financiamiento</h3>
             <p className="text-gray-400 text-lg">
-              Ofrecemos planes flexibles de financiamiento para que adquieras tu auto sin preocupaciones.
+              Ofrecemos planes flexibles de financiamiento para que adquieras tu auto sin preocupaciones
             </p>
           </div>
           {/* Card 4: Mantenimiento */}
@@ -186,21 +186,21 @@ const MainPage = () => {
             <WrenchScrewdriverIcon className="w-12 h-12 text-[#286181] mb-4" />
             <h3 className="text-xl font-bold mb-2">Mantenimiento</h3>
             <p className="text-gray-400 text-lg">
-              Mantén tu vehículo en óptimas condiciones con nuestro servicio de mantenimiento especializado.
+              Mantén tu vehículo en óptimas condiciones con nuestro servicio de mantenimiento especializado
             </p>
           </div>
         </div>
       </section>
 
       {/* Manejo de error y carga */}
-      {loading && (
+      {/* {loading && (
         <div className="text-center text-lg text-gray-400 mt-8">
           Cargando vehículos...
         </div>
       )}
       {error && (
         <div className="text-center text-lg text-red-500 mt-8">{error}</div>
-      )}
+      )} */}
 
       {/* Sección de Vehículos */}
       <section ref={vehiclesRef} aria-labelledby="our-vehicles" className="my-12">
@@ -209,7 +209,7 @@ const MainPage = () => {
             id="our-vehicles"
             className="text-3xl sm:text-4xl md:text-5xl font-raleway font-bold text-white py-3 sm:py-4 px-4 sm:px-6 mb-3 sm:mb-4 inline-flex items-center"
           >
-            <FaCar className="mr-3 sm:mr-4" size={30} /> Nuestra selección
+            {/* <FaCar className="mr-3 sm:mr-4" size={30} /> */} Nuestra selección 
           </h2>
         </div>
         {!loading && !error && cars.length > 0 && (
@@ -242,7 +242,7 @@ const MainPage = () => {
           <div className="mb-8 px-4">
             <p className="text-xl sm:text-2xl md:text-4xl font-bold text-white leading-snug text-center md:text-start drop-shadow-lg">
               Soluciones personalizadas, atención impecable y vehículos que se ajustan
-              a tus necesidades y estilo de vida.
+              a tus necesidades y estilo de vida
             </p>
           </div>
           <div className="p-8 bg-opacity-50 bg-black rounded-lg w-full mx-auto">
