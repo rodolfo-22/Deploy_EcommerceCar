@@ -15,7 +15,18 @@ const AddCarForm = ({ car, onSave, onClose }) => {
   const { addCar, updateCarById, error } = useCarService();
   const { uploadImages, loading, error: imageError } = useImageStore();
 
-    const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Opciones de fabricantes y modelos
+  const manufacturers = ["Toyota", "Honda", "Hyundai", "Kia"];
+  const models = {
+    Toyota: ["Corolla", "Camry", "RAV4"],
+    Honda: ["Civic", "Accord", "CR-V"],
+    Hyundai: ["Elantra", "Sonata", "Tucson"],
+    Kia: ["Soul", "Picanto", "Sportage"],
+  };
+
+    const [selectedManufacturer, setSelectedManufacturer] = useState("");
 
   useEffect(() => {
     if (car) {
@@ -24,8 +35,6 @@ const AddCarForm = ({ car, onSave, onClose }) => {
       reset();
     }
   }, [car, setValue, reset]);
-
-
 
   const onSubmit = async (data) => {
     if (isSubmitting) return;
@@ -81,47 +90,53 @@ const AddCarForm = ({ car, onSave, onClose }) => {
           {/* Campos del formulario */}
           {/* Seleccione la sucursal */}
           <div className="md:col-span-1">
-            <label className="block text-sm font-semibold text-gray-600">
-              Seleccione la sucursal
-            </label>
-            <select
-              id="sucursal"
-              className="border border-gray-300 w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">Seleccionar</option>
-              {/* Agrega opciones aquí */}
-            </select>
+
           </div>
           <div></div>
           <div></div>
+
           <div>
             <label className="block text-sm font-semibold text-gray-600">
               Empresa fabricante del vehículo
             </label>
-            <input
-              type="text"
-              placeholder="Toyota"
+            <select
               {...register("manufacturer", {
                 required: "Este campo es obligatorio",
               })}
+              value={selectedManufacturer}
+              onChange={(e) => setSelectedManufacturer(e.target.value)}
               className="border border-gray-300 w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            >
+              <option value="">Seleccionar</option>
+              {manufacturers.map((manufacturer) => (
+                <option key={manufacturer} value={manufacturer}>
+                  {manufacturer}
+                </option>
+              ))}
+            </select>
             {errors.manufacturer && (
               <span className="text-red-500 text-sm">
                 {errors.manufacturer.message}
               </span>
             )}
           </div>
+
           <div>
             <label className="block text-sm font-semibold text-gray-600">
               Modelo del vehículo
             </label>
-            <input
-              type="text"
-              placeholder="Corolla"
+            <select
               {...register("model", { required: "Este campo es obligatorio" })}
               className="border border-gray-300 w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            >
+              <option value="">Seleccionar</option>
+              {selectedManufacturer &&
+                models[selectedManufacturer].map((model) => (
+                  <option key={model} value={model}>
+                    {model}
+                  </option>
+                ))}
+            </select>
             {errors.model && (
               <span className="text-red-500 text-sm">
                 {errors.model.message}
@@ -198,14 +213,16 @@ const AddCarForm = ({ car, onSave, onClose }) => {
             <label className="block text-sm font-semibold text-gray-600">
               Tipo de combustible
             </label>
-            <input
-              type="text"
-              placeholder="Gasolina"
+            <select
               {...register("fuelType", {
                 required: "Este campo es obligatorio",
               })}
               className="border border-gray-300 w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            >
+              <option value="">Seleccionar</option>
+              <option value="Gasolina">Gasolina</option>
+              <option value="Diésel">Diésel</option>
+            </select>
             {errors.fuelType && (
               <span className="text-red-500 text-sm">
                 {errors.fuelType.message}
@@ -232,12 +249,21 @@ const AddCarForm = ({ car, onSave, onClose }) => {
             <label className="block text-sm font-semibold text-gray-600">
               Tipo de carroceria
             </label>
-            <input
-              type="text"
-              placeholder="sedán, Hatchback, SUV, etc."
-              {...register("type", { required: "Este campo es obligatorio" })}
+            <select
+              {...register("type", {
+                required: "Este campo es obligatorio",
+              })}
               className="border border-gray-300 w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            >
+              <option value="">Seleccionar</option>
+              <option value="Sedán">Sedán</option>
+              <option value="Hatchback">Hatchback</option>
+              <option value="SUV">SUV (Sport Utility Vehicle)</option>
+              <option value="Coupé">Coupé</option>
+              <option value="Camioneta">Camioneta</option>
+              <option value="Todoterreno">Todoterreno</option>
+              <option value="Pickup">Pickup</option>
+            </select>
             {errors.type && (
               <span className="text-red-500 text-sm">
                 {errors.type.message}
@@ -264,14 +290,16 @@ const AddCarForm = ({ car, onSave, onClose }) => {
             <label className="block text-sm font-semibold text-gray-600">
               Tipo de transmisión
             </label>
-            <input
-              type="text"
-              placeholder="Automática, Manual"
+            <select
               {...register("transmission", {
                 required: "Este campo es obligatorio",
               })}
               className="border border-gray-300 w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            >
+              <option value="">Seleccionar</option>
+              <option value="Automatica">Automatica</option>
+              <option value="Manual">Manual</option>
+            </select>
             {errors.transmission && (
               <span className="text-red-500 text-sm">
                 {errors.transmission.message}
@@ -300,14 +328,16 @@ const AddCarForm = ({ car, onSave, onClose }) => {
             <label className="block text-sm font-semibold text-gray-600">
               Estado
             </label>
-            <input
-              type="text"
-              placeholder="Nuevo, Usado"
+            <select
               {...register("status", {
                 required: "Este campo es obligatorio",
               })}
               className="border border-gray-300 w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            >
+              <option value="">Seleccionar</option>
+              <option value="Nuevo">Nuevo</option>
+              <option value="Usado">Usado</option>
+            </select>
             {errors.status && (
               <span className="text-red-500 text-sm">
                 {errors.status.message}
@@ -336,14 +366,17 @@ const AddCarForm = ({ car, onSave, onClose }) => {
             <label className="block text-sm font-semibold text-gray-600">
               Tren de tracción
             </label>
-            <input
-              type="text"
-              placeholder="delantera, trasera, 4x4"
+            <select
               {...register("driveTrain", {
                 required: "Este campo es obligatorio",
               })}
               className="border border-gray-300 w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            >
+              <option value="">Seleccionar</option>
+              <option value="Delantera">Delantera</option>
+              <option value="Trasera">Trasera</option>
+              <option value="4x4">4x4</option>
+            </select>
             {errors.driveTrain && (
               <span className="text-red-500 text-sm">
                 {errors.driveTrain.message}
@@ -354,14 +387,17 @@ const AddCarForm = ({ car, onSave, onClose }) => {
             <label className="block text-sm font-semibold text-gray-600">
               Número de puertas
             </label>
-            <input
-              type="number"
-              placeholder="4"
+            <select
               {...register("numberOfDoors", {
                 required: "Este campo es obligatorio",
               })}
               className="border border-gray-300 w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            >
+              <option value="">Seleccionar</option>
+              <option value="2">2</option>
+              <option value="4">4</option>
+              <option value="6">6</option>
+            </select>
             {errors.numberOfDoors && (
               <span className="text-red-500 text-sm">
                 {errors.numberOfDoors.message}
@@ -390,17 +426,94 @@ const AddCarForm = ({ car, onSave, onClose }) => {
             <label className="block text-sm font-semibold text-gray-600">
               Capacidad de asientos
             </label>
-            <input
-              type="number"
-              placeholder="5"
+            <select
               {...register("seatingCapacity", {
                 required: "Este campo es obligatorio",
               })}
               className="border border-gray-300 w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            >
+              <option value="">Seleccionar</option>
+              <option value="2">2</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="8">8</option>
+            </select>
             {errors.seatingCapacity && (
               <span className="text-red-500 text-sm">
                 {errors.seatingCapacity.message}
+              </span>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-600">
+              Alcance: rango de combustible
+            </label>
+            <input
+              type="number"
+              placeholder="20 "
+              {...register("fuelRange", {
+                required: "Este campo es obligatorio",
+              })}
+              className="border border-gray-300 w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            {errors.fuelRange && (
+              <span className="text-red-500 text-sm">
+                {errors.fuelRange.message}
+              </span>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-600">
+              Peso del vehiculo en Kilogramos
+            </label>
+            <input
+              type="number"
+              placeholder="150 "
+              {...register("weight", {
+                required: "Este campo es obligatorio",
+              })}
+              className="border border-gray-300 w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            {errors.weight && (
+              <span className="text-red-500 text-sm">
+                {errors.weight.message}
+              </span>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-600">
+              Longitud de rueda
+            </label>
+            <input
+              type="number"
+              placeholder="16"
+              {...register("wheel_length", {
+                required: "Este campo es obligatorio",
+              })}
+              className="border border-gray-300 w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            {errors.wheel_length && (
+              <span className="text-red-500 text-sm">
+                {errors.wheel_length.message}
+              </span>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-600">
+              Aceleracion
+            </label>
+            <input
+              type="text"
+              placeholder="0-50 mph en 10s"
+              {...register("aceleration", {
+                required: "Este campo es obligatorio",
+              })}
+              className="border border-gray-300 w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            {errors.aceleration && (
+              <span className="text-red-500 text-sm">
+                {errors.aceleration.message}
               </span>
             )}
           </div>

@@ -1,9 +1,56 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useCarService, useBranchService } from "../../../hooks";
 import AddCarForm from "./AddCarForm";
 
-const VehiclesMain = ({ cars, deleteCar, refreshCars }) => {
+const VehiclesMain = () => {
+  const {
+    branchs,
+    loading: branchLoading,
+    error: branchError,
+  } = useBranchService();
+  const {
+    loading: carLoading,
+    error: carError,
+    getCarsByBranch,
+    deleteCarById,
+    getAllCars,
+  } = useCarService();
+  const [cars, setCars] = useState([]);
+  const [selectedBranch, setSelectedBranch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [currentCar, setCurrentCar] = useState(null);
+
+const refreshCars = async () => {
+  try {
+    if (selectedBranch) {
+      const response = await getCarsByBranch(selectedBranch);
+      setCars(response?.data?.vehicles || []); // Actualiza el estado con vehículos de la sucursal
+    } else {
+      const response = await getAllCars();
+      setCars(response || []); // Asegúrate de que sea un arreglo
+    }
+  } catch (err) {
+    console.error("Error al actualizar los vehículos:", err);
+    setCars([]); // Limpia el estado si ocurre un error
+  }
+};
+
+
+  const deleteCar = async (id) => {
+    try {
+      await deleteCarById(id);
+      refreshCars();
+    } catch (err) {
+      console.error("Error al eliminar el vehículo:", err);
+    }
+  };
+
+  useEffect(() => {
+    refreshCars(); // Carga inicial de datos
+  }, [selectedBranch]);
+
+if (branchError) return <div>Error al cargar sucursales: {branchError}</div>;
+if (carError) return <div>Error al cargar vehículos: {carError}</div>;
 
   const openModal = (car = null) => {
     setCurrentCar(car);
@@ -22,7 +69,6 @@ const VehiclesMain = ({ cars, deleteCar, refreshCars }) => {
           Gestionar vehículos
         </h2>
 
-        {/* Sección de selección de sucursal y botón de agregar */}
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center space-x-4">
             <label htmlFor="sucursal" className="font-semibold">
@@ -31,14 +77,27 @@ const VehiclesMain = ({ cars, deleteCar, refreshCars }) => {
             <select
               id="sucursal"
               className="border rounded-md px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+              value={selectedBranch}
+              onChange={(e) => setSelectedBranch(e.target.value)}
             >
-              <option value="">Seleccionar</option>
-              {/* Agrega opciones de sucursales aquí */}
+              <option value="">Todas las sucursales</option>
+              {branchLoading ? (
+                <option>Cargando sucursales...</option>
+              ) : branchError ? (
+                <option>Error al cargar sucursales</option>
+              ) : Array.isArray(branchs) && branchs.length > 0 ? (
+                branchs.map((branch) => (
+                  <option key={branch._id} value={branch._id}>
+                    {branch.name}
+                  </option>
+                ))
+              ) : (
+                <option>No hay sucursales disponibles</option>
+              )}
             </select>
           </div>
-          {/* Botón para abrir el modal para agregar */}
           <button
-            onClick={() => openModal()} // Llama a openModal sin argumentos para agregar
+            onClick={() => openModal()}
             className="bg-black text-white px-4 py-2 rounded-md font-semibold hover:bg-gray-800"
           >
             + Agregar vehículo
@@ -58,7 +117,7 @@ const VehiclesMain = ({ cars, deleteCar, refreshCars }) => {
                 car={currentCar}
                 onClose={closeModal}
                 onSave={async () => {
-                  await refreshCars(); // Refresca los datos después de guardar
+                  await refreshCars();
                   closeModal();
                 }}
               />
@@ -77,7 +136,7 @@ const VehiclesMain = ({ cars, deleteCar, refreshCars }) => {
             </tr>
           </thead>
           <tbody>
-            {Array.isArray(cars) &&
+            {Array.isArray(cars) && cars.length > 0 ? (
               cars.map((car) => (
                 <tr
                   key={car._id}
@@ -102,7 +161,14 @@ const VehiclesMain = ({ cars, deleteCar, refreshCars }) => {
                     </button>
                   </td>
                 </tr>
-              ))}
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" className="text-center text-gray-500 py-4">
+                  No hay vehículos disponibles.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
