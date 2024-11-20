@@ -1,72 +1,127 @@
 import React, { useState, useEffect } from "react";
+import { mdiOfficeBuilding, mdiAccountGroup, mdiCar, mdiLogout } from "@mdi/js";
+import Icon from "@mdi/react";
 import { Link } from "react-router-dom";
-import CarListAdmin from "./CarListAdmin";
-import { HeaderLogin } from "../../components";
+import { VehiclesMain, EmployeesMain, BranchMain } from "../../components";
+import { useAuthStore } from "../../../hooks"; 
 import { useCarService } from "../../../hooks";
 import profileImage from "../../../assets/profile.png";
-import EmployeesMain from "../../components/employees/EmployeesMain";
 
 const AdminPage = () => {
-  const { cars, loading, error, deleteCarById } = useCarService();
+  const { cars, loading, error, deleteCarById, getAllCars } = useCarService();
+  const { startLogout, user } = useAuthStore();
+  const [selectedComponent, setSelectedComponent] = useState(1);
+
+  // Función para sincronizar los carros después de cualquier operación
+  const refreshCars = async () => {
+    try {
+      await getAllCars(); // Refresca los datos globales del hook
+    } catch (err) {
+      console.error("Error al actualizar los vehículos:", err);
+    }
+  };
+
+    useEffect(() => {
+      refreshCars(); // Cargar los datos iniciales
+    }, []);
 
   const deleteCar = async (id) => {
     try {
       await deleteCarById(id);
+      refreshCars(); // Refresca la lista después de eliminar
     } catch (err) {
       console.error("Error al eliminar el vehículo:", err);
     }
   };
 
-  const [selectedComponent, setSelectedComponent] = useState(1);
-
-  const setComponent = (option) => {
-    setSelectedComponent(option);
-  };
-
-  useEffect(() => {
-    console.log("Selected component:", selectedComponent);
-  }, [selectedComponent]);
-
   if (loading) return <div>Cargando vehículos...</div>;
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="flex flex-row h-screen">
+    <div className="flex h-screen">
       {/* Sidebar */}
-      <div className="bg-gray-950 text-white p-4 h-full w-1/6">
-        <div className="flex justify-center m-10">
-          <img class="h-auto w-auto rounded-lg dark:shadow-gray-800" src={profileImage} alt="image description"></img>
+      <div className="bg-gray-950 text-white p-4 w-1/6 flex flex-col justify-between items-center">
+        {/* Información del usuario */}
+        <div className="w-full">
+          <div className="flex justify-center m-10">
+            <img
+              className="h-auto w-auto rounded-lg dark:shadow-gray-800"
+              src={profileImage}
+              alt="image description"
+            />
+          </div>
+          <div className="flex justify-center">
+            <p className="text-3xl text-center">{user?.name || "Usuario"}</p>
+          </div>
+          {/* Enlaces de navegación */}
+          <div className="flex flex-col mt-10 space-y-5">
+            <div
+              onClick={() => setSelectedComponent(1)}
+              className="text-center"
+            >
+              <Link
+                to="/admin"
+                className="flex items-center justify-center gap-3 py-2 text-xl"
+              >
+                <Icon path={mdiCar} size={1.5} />
+                Gestionar vehículos
+              </Link>
+            </div>
+            <div
+              onClick={() => setSelectedComponent(2)}
+              className="text-center"
+            >
+              <Link
+                to="/admin"
+                className="flex items-center justify-center gap-3 py-2 text-xl"
+              >
+                <Icon path={mdiAccountGroup} size={1.5} />
+                Gestión empleados
+              </Link>
+            </div>
+            <div
+              onClick={() => setSelectedComponent(3)}
+              className="text-center"
+            >
+              <Link
+                to="#"
+                className="flex items-center justify-center gap-3 py-2 text-xl"
+              >
+                <Icon path={mdiOfficeBuilding} size={1.5} />
+                Sucursales de venta
+              </Link>
+            </div>
+          </div>
         </div>
-        <div className="flex justify-center">
-          <p className="text-3xl">Carlos Hernández</p>
-        </div>
-        <div className="flex justify-center mt-10" onClick={() => setComponent(1)}>
-          <Link to="/admin" className="block py-2 text-xl mb-5">Gestionar vehículos</Link>
-        </div>
-        <div className="flex justify-center" onClick={() => setComponent(2)}>
-          <Link to="#" className="block py-2 text-xl mb-5">Administrar empleados</Link>
-        </div>
-        <div className="flex justify-center" onClick={() => setComponent(3)}>
-          <Link to="#" className="block py-2 text-xl mb-5">Sucursales de venta</Link>
-        </div>
-        <div className="flex justify-center" onClick={() => setComponent(4)}>
-          <Link to="#" className="block py-2 text-xl mb-5">Asistir cotizaciones</Link>
+
+        {/* Botón de cerrar sesión */}
+        <div className="mt-auto w-full">
+          <button
+            onClick={startLogout}
+            className="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex items-center justify-center gap-3"
+          >
+            <Icon path={mdiLogout} size={1.5} />
+            Cerrar Sesión
+          </button>
         </div>
       </div>
 
       {/* Content */}
-      <div className="w-5/6">
-
-        {/* Vamos a implementar un renderizado condicional en base al estado de selected component */}
-        {/* <HeaderLogin /> */}
-        {selectedComponent === 1 && <CarListAdmin cars={cars} deleteCar={deleteCar} />}
+      <div className="w-5/6 overflow-y-auto">
+        {selectedComponent === 1 && (
+          <VehiclesMain
+            cars={cars}
+            deleteCar={deleteCar}
+            refreshCars={refreshCars}
+          />
+        )}
         {selectedComponent === 2 && <EmployeesMain />}
-        {selectedComponent === 3 && <div>Sucursales de venta</div>}
+        {selectedComponent === 3 && <BranchMain />}
         {selectedComponent === 4 && <div>Asistir cotizaciones</div>}
       </div>
     </div>
   );
+
 };
 
 export default AdminPage;
-
