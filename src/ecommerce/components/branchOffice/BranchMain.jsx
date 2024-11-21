@@ -118,7 +118,9 @@ const handleDeleteBranch = async (branchId) => {
               <th className="px-4 py-2 font-semibold">Teléfono</th>
               <th className="px-4 py-2 font-semibold">Vehiculos</th>
               <th className="px-4 py-2 font-semibold">Empleados</th>
-              <th className="px-4 py-2 font-semibold">Acciones</th>
+              <th className="px-4 py-2 font-semibold flex justify-center items-center space-x-2">
+                Acciones
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -156,7 +158,7 @@ const handleDeleteBranch = async (branchId) => {
                       "No hay empleados"
                     )}
                   </td>
-                  <td className="px-4 py-2 flex space-x-2">
+                  <td className="px-4 py-2 flex justify-center items-center space-x-2">
                     <button
                       onClick={() => handleOpenModal(branch)}
                       className="text-blue-500 hover:underline"
