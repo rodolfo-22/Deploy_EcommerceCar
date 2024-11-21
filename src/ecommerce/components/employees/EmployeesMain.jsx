@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import EmployeeModal from "./EmployeeForm";
 import { useEmployees, useBranchService, useAuthStore } from "../../../hooks";
+import Swal from "sweetalert2";
+
 
 const EmployeesMain = () => {
   const { startRegister } = useAuthStore();
@@ -63,15 +65,40 @@ const EmployeesMain = () => {
     }
   };
 
-  const deleteEmploye = async (id) => {
+const deleteEmploye = async (id) => {
+  const confirmation = await Swal.fire({
+    title: "¿Estás seguro?",
+    text: "Esta acción eliminará al empleado permanentemente.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Sí, eliminar",
+    cancelButtonText: "Cancelar",
+  });
+
+  if (confirmation.isConfirmed) {
     try {
       await deleteUser(id); // Elimina el empleado
       await getAllEmployees(); // Recarga la lista completa de empleados
       refreshEmployees(); // Actualiza los empleados filtrados
+
+      Swal.fire({
+        icon: "success",
+        title: "Empleado eliminado",
+        confirmButtonText: "Aceptar",
+      });
     } catch (err) {
       console.error("Error al eliminar el empleado:", err);
+
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudo eliminar al empleado",
+        confirmButtonText: "Aceptar",
+      });
     }
-  };
+  }
+};
+
 
   useEffect(() => {
     const fetchData = async () => {
