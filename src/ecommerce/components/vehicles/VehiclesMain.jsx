@@ -155,9 +155,13 @@ if (carError) return <div>Error al cargar vehículos: {carError}</div>;
             <tr className="border-b-2 border-gray-300 text-left text-gray-500">
               <th className="px-4 py-2 font-semibold">Fabricante</th>
               <th className="px-4 py-2 font-semibold">Modelo</th>
+              <th className="px-4 py-2 font-semibold">Motor</th>
+              <th className="px-4 py-2 font-semibold">Transmision</th>
               <th className="px-4 py-2 font-semibold">Año</th>
               <th className="px-4 py-2 font-semibold">Estado</th>
-              <th className="px-4 py-2 font-semibold">Acciones</th>
+              <th className="px-4 py-2 font-semibold flex justify-center items-center space-x-2">
+                Acciones
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -169,9 +173,11 @@ if (carError) return <div>Error al cargar vehículos: {carError}</div>;
                 >
                   <td className="px-4 py-2">{car.manufacturer}</td>
                   <td className="px-4 py-2">{car.model}</td>
+                  <td className="px-4 py-2">{car.engine}</td>
+                  <td className="px-4 py-2">{car.transmission}</td>
                   <td className="px-4 py-2">{car.year}</td>
                   <td className="px-4 py-2">{car.status}</td>
-                  <td className="px-4 py-2 flex justify-center space-x-2">
+                  <td className="px-4 py-2 flex justify-center items-center space-x-2">
                     <button
                       onClick={() => openModal(car)}
                       className="text-blue-500 hover:underline"
