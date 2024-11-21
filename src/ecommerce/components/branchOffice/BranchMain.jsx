@@ -1,103 +1,180 @@
 import React, { useState } from "react";
-import BranchModal from "./BranchForm";
-import { useBranchService } from "../../../hooks";
+import CombinedBranchModal from "./BranchForm"; 
+import { useBranchService, useCarService, useEmployees } from "../../../hooks";
+import Swal from "sweetalert2";
 
 const BranchMain = () => {
-  const { branchs, loading, error, getAllBranchs, createBranch } = useBranchService();
+  const { branchs, getAllBranchs, createBranch, updateBranch, deleteBranch } =
+    useBranchService();
+  const { cars: allCars, getAllCars } = useCarService();
+  const { employees: allEmployees, getAllEmployees } = useEmployees();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedBranch, setSelectedBranch] = useState(null);
+
+const handleOpenModal = async (branch = null) => {
+  await getAllCars(); // Asegúrate de tener la lista de vehículos
+  await getAllEmployees(); // Asegúrate de tener la lista de empleados
+
+  if (branch) {
+    // Pre-carga empleados y vehículos existentes
+    branch.vehicles = branch.vehicles?.map((vehicle) => vehicle._id) || [];
+    branch.employees = branch.employees?.map((employee) => employee._id) || [];
+  }
+
+  setSelectedBranch(branch);
+  setIsModalOpen(true);
+};
+
 
   const handleBranchSubmit = async (data) => {
-    const result = await createBranch(data);
-    if (result.success) {
-      await getAllBranchs(); // Recarga los empleados tras un registro exitoso
+    const result = selectedBranch
+      ? await updateBranch(selectedBranch._id, data)
+      : await createBranch(data);
+
+    if (result?.success) {
+      await getAllBranchs();
+      Swal.fire({
+        icon: "success",
+        title: "Operación exitosa",
+        text: `Sucursal ${
+          selectedBranch ? "actualizada" : "creada"
+        } correctamente`,
+        confirmButtonText: "Aceptar",
+      });
+      setIsModalOpen(false);
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: result?.message || "No se pudo completar la operación",
+        confirmButtonText: "Aceptar",
+      });
     }
-    return result; // Devuelve el resultado para manejar mensajes en el modal
   };
+
+const handleDeleteBranch = async (branchId) => {
+  const confirmation = await Swal.fire({
+    title: "¿Estás seguro?",
+    text: "Esta acción eliminará la sucursal permanentemente.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Sí, eliminar",
+    cancelButtonText: "Cancelar",
+  });
+
+  if (confirmation.isConfirmed) {
+    const result = await deleteBranch(branchId);
+    if (result.success) {
+      Swal.fire({
+        icon: "success",
+        title: "Sucursal eliminada",
+        confirmButtonText: "Aceptar",
+      });
+      await getAllBranchs(); // Actualiza la lista
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: result.message || "No se pudo eliminar la sucursal",
+        confirmButtonText: "Aceptar",
+      });
+    }
+  }
+};
+
 
   return (
     <div className="p-4 flex justify-center items-center">
       <div className="border-4 border-gray-300 rounded-lg p-6 w-full max-w-full bg-white">
         <h2 className="text-2xl font-bold mb-4 text-center">
-          Gestionar sucursaels
+          Gestionar sucursales
         </h2>
 
+        {/* Botón para abrir el modal */}
         {/* Sección de selección de sucursal y botón de agregar */}
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center space-x-4">
             <label htmlFor="sucursal" className="font-semibold">
-              Empleados asignados a la sucursal:
+              Sucursales disponibles:
             </label>
           </div>
           {/* Botón para abrir el modal para agregar */}
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => handleOpenModal()}
             className="bg-black text-white px-4 py-2 rounded-md font-semibold hover:bg-gray-800"
           >
             + Agregar Sucursal
           </button>
         </div>
 
-        {/* Seccion de la tabla mostrar empleados */}
+        {/* Tabla de sucursales */}
         <table className="w-full border-collapse bg-white">
           <thead>
             <tr className="border-b-2 border-gray-300 text-left text-gray-500">
               <th className="px-4 py-2 font-semibold">Nombre</th>
-              <th className="px-4 py-2 font-semibold">Direccion</th>
-              <th className="px-4 py-2 font-semibold">Telefono</th>
-              <th className="px-4 py-2 font-semibold">Correo electronico</th>
+              <th className="px-4 py-2 font-semibold">Dirección</th>
+              <th className="px-4 py-2 font-semibold">Teléfono</th>
               <th className="px-4 py-2 font-semibold">Empleados</th>
               <th className="px-4 py-2 font-semibold">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {branchs.map((branch) => (
-              <tr
-                key={branch._id}
-                className="border-b border-gray-200 text-gray-800"
-              >
-                <td className="px-4 py-2">{branch.name}</td>
-                <td className="px-4 py-2">{branch.address}</td>
-                <td className="px-4 py-2">{branch.phoneNumber}</td>
-                <td className="px-4 py-2">{branch.email}</td>
-                <td className="px-4 py-2">
-                  {branch.employees && branch.employees.length > 0 ? (
-                    <ul>
-                      {branch.employees.map((employee) => (
-                        <li key={employee._id}>{employee.username}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <span>No hay empleados</span>
-                  )}
-                </td>
-                <td className="px-4 py-2 flex justify-center space-x-2">
-                  <button
-                    onClick={() => console.log("Editar empleado", employee._id)}
-                    className="text-blue-500 hover:underline"
-                  >
-                    ✏️
-                  </button>
-                  <button
-                    onClick={() =>
-                      console.log("Eliminar empleado", employee._id)
-                    }
-                    className="text-red-500 hover:underline"
-                  >
-                    🗑️
-                  </button>
+            {branchs.length ? (
+              branchs.map((branch) => (
+                <tr
+                  key={branch._id}
+                  className="border-b border-gray-200 text-gray-800"
+                >
+                  <td className="px-4 py-2">{branch.name}</td>
+                  <td className="px-4 py-2">{branch.address}</td>
+                  <td className="px-4 py-2">{branch.phoneNumber}</td>
+                  <td className="px-4 py-2">
+                    {branch.employees?.length ? (
+                      <ul>
+                        {branch.employees.map((employee) => (
+                          <li key={employee._id}>{employee.username}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      "No hay empleados"
+                    )}
+                  </td>
+                  <td className="px-4 py-2 flex space-x-2">
+                    <button
+                      onClick={() => handleOpenModal(branch)}
+                      className="text-blue-500 hover:underline"
+                    >
+                      ✏️
+                    </button>
+                    <button
+                      onClick={() => handleDeleteBranch(branch._id)}
+                      className="text-red-500 hover:underline"
+                    >
+                      🗑️
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" className="text-center text-gray-500 py-4">
+                  No hay sucursales disponibles
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
 
-      {/* Modal */}
-
-      <BranchModal
+      {/* Modal combinado */}
+      <CombinedBranchModal
         isOpen={isModalOpen}
+        initialData={selectedBranch}
         onClose={() => setIsModalOpen(false)}
-        onSubmit={handleBranchSubmit} // Pasa la función al modal
+        onSubmit={handleBranchSubmit}
+        cars={allCars}
+        employees={allEmployees}
       />
     </div>
   );
