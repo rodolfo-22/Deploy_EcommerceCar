@@ -34,11 +34,10 @@ export const useAuthStore = () => {
     }
     }
 
-    const startRegister = async ({ username, email, password }) => {
+    const startRegister = async ({ username, email, password, role }) => {
         try {
             const { data } = await EcommerApi.post('/users/register', { 
-                username, email, password, 
-                role: 'seller'
+                username, email, password, role
                 });
 
             // Verifica si el registro fue exitoso
