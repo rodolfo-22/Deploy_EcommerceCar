@@ -9,7 +9,7 @@ export const useEmployees = () => {
   const getAllEmployees = async () => {
     setLoading(true);
     try {
-      const response = await EcommerApi.get("/employees");
+      const response = await EcommerApi.get("/users");
       setEmployees(Array.isArray(response.data) ? response.data : []);
       setError(null); // Limpia cualquier error previo
     } catch (error) {
