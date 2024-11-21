@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 
-const EmployeeModal = ({ isOpen, onClose, onSubmit }) => {
+const EmployeeModal = ({ isOpen, onClose, onSubmit, employee }) => {
   const {
     register,
     handleSubmit,
@@ -10,20 +10,44 @@ const EmployeeModal = ({ isOpen, onClose, onSubmit }) => {
     reset,
   } = useForm();
 
+  // Resetea el formulario al abrir el modal (crear o editar)
+useEffect(() => {
+  if (isOpen && !employee) {
+    reset({
+      username: "",
+      email: "",
+      password: "",
+      role: "",
+    }); // Limpia los campos para el modo "crear"
+  } else if (isOpen && employee) {
+    reset({
+      username: employee.username || "",
+      email: employee.email || "",
+      password: "", // No se muestra la contraseña por seguridad
+      role: employee.role || "",
+    }); // Llena los campos para el modo "editar"
+  }
+}, [employee, isOpen, reset]);
+
+
   const onSubmitForm = async (data) => {
     const result = await onSubmit(data);
     if (result.success) {
       Swal.fire({
         icon: "success",
-        title: "Empleado registrado exitosamente",
+        title: employee
+          ? "Empleado actualizado exitosamente"
+          : "Empleado registrado exitosamente",
         confirmButtonText: "Aceptar",
       });
-      reset(); // Reinicia los campos del formulario
-      onClose(); // Cierra el modal
+      reset();
+      onClose();
     } else {
       Swal.fire({
         icon: "error",
-        title: "Error al registrar empleado",
+        title: employee
+          ? "Error al actualizar empleado"
+          : "Error al registrar empleado",
         text: result.message,
         confirmButtonText: "Aceptar",
       });
@@ -34,11 +58,7 @@ const EmployeeModal = ({ isOpen, onClose, onSubmit }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div
-        className="relative bg-white p-8 rounded-lg shadow-lg max-w-md w-full border-4 border-gray-300"
-        style={{ maxHeight: "90vh", overflowY: "auto" }}
-      >
-        {/* Botón de cerrar */}
+      <div className="relative bg-white p-8 rounded-lg shadow-lg max-w-md w-full border-4 border-gray-300">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
@@ -47,8 +67,9 @@ const EmployeeModal = ({ isOpen, onClose, onSubmit }) => {
         </button>
 
         <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
-          Agregar Nuevo Empleado
+          {employee ? "Editar Empleado" : "Agregar Nuevo Empleado"}
         </h2>
+
         <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-6">
           {/* Campo Nombre */}
           <div>
@@ -103,7 +124,7 @@ const EmployeeModal = ({ isOpen, onClose, onSubmit }) => {
               type="password"
               placeholder="********"
               {...register("password", {
-                required: "La contraseña es obligatoria",
+                required: employee ? false : "La contraseña es obligatoria",
                 minLength: {
                   value: 6,
                   message: "La contraseña debe tener al menos 6 caracteres",
@@ -118,13 +139,33 @@ const EmployeeModal = ({ isOpen, onClose, onSubmit }) => {
             )}
           </div>
 
+          {/* Campo Rol */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-600">
+              Rol del usuario
+            </label>
+            <select
+              {...register("role", { required: "El rol es obligatorio" })}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Selecciona un rol</option>
+              <option value="seller">Vendedor</option>
+              <option value="admin">Administrador</option>
+            </select>
+            {errors.role && (
+              <span className="text-red-500 text-sm">
+                {errors.role.message}
+              </span>
+            )}
+          </div>
+
           {/* Botón de envío */}
           <div className="text-center mt-6">
             <button
               type="submit"
               className="bg-black text-white px-6 py-2 rounded-md font-semibold hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
-              Agregar Empleado
+              {employee ? "Actualizar Empleado" : "Agregar Empleado"}
             </button>
           </div>
         </form>

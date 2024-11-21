@@ -5,15 +5,44 @@ import { useAuthStore } from "../../../hooks";
 
 const EmployeesMain = () => {
     const { startRegister } = useAuthStore();
-    const { employees, loading, error, getAllEmployees } = useEmployees();
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const {
+      employees,
+      getAllEmployees,
+      deleteUser,
+      updateUser,
+    } = useEmployees();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   const handleEmployeeSubmit = async (data) => {
-    const result = await startRegister(data);
+    const result = selectedEmployee
+      ? await updateUser(selectedEmployee._id, data)
+      : await startRegister(data);
+
     if (result.success) {
-      await getAllEmployees(); // Recarga los empleados tras un registro exitoso
+      await getAllEmployees();
     }
-    return result; // Devuelve el resultado para manejar mensajes en el modal
+    return result;
+  };
+
+  const handleEditClick = (employee) => {
+    setSelectedEmployee(employee);
+    setIsModalOpen(true);
+  };
+
+  const handleAddClick = () => {
+    setSelectedEmployee(null);
+    setIsModalOpen(true);
+  };
+
+  const deleteEmploye = async (id) => {
+    try {
+      await deleteUser(id); // Asegúrate de que deleteUser no se auto-llama
+      await getAllEmployees(); // Recarga los empleados tras eliminar
+    } catch (err) {
+      console.error("Error al eliminar el empleado:", err);
+    }
   };
 
   return (
@@ -39,7 +68,7 @@ const EmployeesMain = () => {
           </div>
           {/* Botón para abrir el modal para agregar */}
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={handleAddClick}
             className="bg-black text-white px-4 py-2 rounded-md font-semibold hover:bg-gray-800"
           >
             + Agregar Empleado
@@ -67,15 +96,13 @@ const EmployeesMain = () => {
                 <td className="px-4 py-2">{employee._id}</td>
                 <td className="px-4 py-2 flex justify-center space-x-2">
                   <button
-                    onClick={() => console.log("Editar empleado", employee._id)}
+                    onClick={() => handleEditClick(employee)}
                     className="text-blue-500 hover:underline"
                   >
                     ✏️
                   </button>
                   <button
-                    onClick={() =>
-                      console.log("Eliminar empleado", employee._id)
-                    }
+                    onClick={() => deleteEmploye(employee._id)}
                     className="text-red-500 hover:underline"
                   >
                     🗑️
@@ -92,9 +119,9 @@ const EmployeesMain = () => {
       <EmployeeModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSubmit={handleEmployeeSubmit} // Pasa la función al modal
+        onSubmit={handleEmployeeSubmit} // Asegúrate de pasar esta función
+        employee={selectedEmployee}
       />
-
     </div>
   );
 

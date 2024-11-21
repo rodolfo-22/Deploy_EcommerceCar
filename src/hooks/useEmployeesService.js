@@ -20,6 +20,26 @@ export const useEmployees = () => {
     }
   };
 
+const updateUser = async (id, userData) => {
+  try {
+    const response = await EcommerApi.put(`/users/${id}`, userData);
+    return { success: true, data: response.data };
+  } catch (error) {
+    return { success: false, message: error.response?.data?.message || "Error desconocido" };
+  }
+};
+
+
+const deleteUser = async (id) => {
+  try {
+    const response = await EcommerApi.delete(`/users/${id}`);
+    return response.data; // Devuelve un mensaje de éxito si es necesario
+  } catch (error) {
+    throw error; // Lanza el error para manejarlo en el lugar donde se llame
+  }
+};
+
+
   useEffect(() => {
     getAllEmployees(); // Llama al método al montar el componente
   }, []);
@@ -29,5 +49,7 @@ export const useEmployees = () => {
     loading,
     error,
     getAllEmployees,
+    updateUser,
+    deleteUser,
   };
 };
