@@ -116,6 +116,7 @@ const handleDeleteBranch = async (branchId) => {
               <th className="px-4 py-2 font-semibold">Nombre</th>
               <th className="px-4 py-2 font-semibold">Dirección</th>
               <th className="px-4 py-2 font-semibold">Teléfono</th>
+              <th className="px-4 py-2 font-semibold">Vehiculos</th>
               <th className="px-4 py-2 font-semibold">Empleados</th>
               <th className="px-4 py-2 font-semibold">Acciones</th>
             </tr>
@@ -130,6 +131,20 @@ const handleDeleteBranch = async (branchId) => {
                   <td className="px-4 py-2">{branch.name}</td>
                   <td className="px-4 py-2">{branch.address}</td>
                   <td className="px-4 py-2">{branch.phoneNumber}</td>
+                  <td className="px-4 py-2">
+                    {branch.vehicles?.length ? (
+                      <ul>
+                        {branch.vehicles.map((vehicle) => (
+                          <li key={vehicle._id}>
+                            {vehicle.model}, {vehicle.year}
+                          </li> // Asegúrate de que "model" existe en el objeto
+                        ))}
+                      </ul>
+                    ) : (
+                      "No hay vehículos"
+                    )}
+                  </td>
+
                   <td className="px-4 py-2">
                     {branch.employees?.length ? (
                       <ul>
