@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useCarService, useBranchService } from "../../../hooks";
 import AddCarForm from "./AddCarForm";
+import Swal from "sweetalert2";
+
 
 const VehiclesMain = () => {
   const {
@@ -36,14 +38,37 @@ const refreshCars = async () => {
 };
 
 
-  const deleteCar = async (id) => {
+const deleteCar = async (id) => {
+  const confirmation = await Swal.fire({
+    title: "¿Estás seguro?",
+    text: "Esta acción eliminará el vehículo permanentemente.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Sí, eliminar",
+    cancelButtonText: "Cancelar",
+  });
+
+  if (confirmation.isConfirmed) {
     try {
       await deleteCarById(id);
+      Swal.fire({
+        icon: "success",
+        title: "Vehículo eliminado",
+        confirmButtonText: "Aceptar",
+      });
       refreshCars();
     } catch (err) {
       console.error("Error al eliminar el vehículo:", err);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudo eliminar el vehículo",
+        confirmButtonText: "Aceptar",
+      });
     }
-  };
+  }
+};
+
 
   useEffect(() => {
     refreshCars(); // Carga inicial de datos

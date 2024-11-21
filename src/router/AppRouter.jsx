@@ -7,22 +7,20 @@ import { CarDetail, EditCarForm } from "../ecommerce/components";
 import { HashLoader } from "react-spinners";
 
 const AppRouter = ({ setUser }) => {
-  const { status, user, checkAuthToken } = useAuthStore();
+  const { status, user, initAuth } = useAuthStore();
 
-  // Verificar token al cargar la aplicacións
+  // Verificar token al cargar la aplicación
   useEffect(() => {
-    checkAuthToken();
+    initAuth(); // Inicializar autenticación
   }, []);
 
-
-if (status === "checking") {
-  return (
-    <div className="flex items-center justify-center min-h-screen">
-      <HashLoader color="#36d7b7" size={50} />
-    </div>
-  );
-}
-
+  if (status === "checking") {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <HashLoader color="#36d7b7" size={50} />
+      </div>
+    );
+  }
 
   return (
     <Routes>
