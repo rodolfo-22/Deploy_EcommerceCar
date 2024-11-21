@@ -46,12 +46,12 @@ const updateBranch = async (branchId, branchData) => {
     Object.entries(branchData).filter(([_, value]) => value != null)
   );
 
-  // Asegúrate de eliminar duplicados en empleados y vehículos
+  // Asegúrate de enviar solo identificadores de empleados y vehículos
   if (filteredData.employees) {
-    filteredData.employees = [...new Set(filteredData.employees)];
+    filteredData.employees = filteredData.employees.map((employee) => employee._id);
   }
   if (filteredData.vehicles) {
-    filteredData.vehicles = [...new Set(filteredData.vehicles)];
+    filteredData.vehicles = filteredData.vehicles.map((vehicle) => vehicle._id);
   }
 
   console.log("Datos enviados al backend:", filteredData); // Debugging

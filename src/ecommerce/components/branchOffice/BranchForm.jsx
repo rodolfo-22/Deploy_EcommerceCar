@@ -20,34 +20,41 @@ const CombinedBranchModal = ({
   const [selectedEmployees, setSelectedEmployees] = useState([]);
 
 useEffect(() => {
-  console.log("Cars:", cars);
-  console.log("Employees:", employees);
-  if (initialData) {
-    reset(initialData); // Pre-carga de datos en el formulario
-    setSelectedCars(initialData.vehicles?.map((vehicle) => vehicle._id) || []);
-    setSelectedEmployees(
-      initialData.employees?.map((employee) => employee._id) || []
-    );
+  if (initialData && Object.keys(initialData).length > 0) {
+    reset(initialData); // Pre-carga los datos en el formulario
+    setSelectedCars(initialData.vehicles || []);
+    setSelectedEmployees(initialData.employees || []); // Objetos completos
+  } else {
+    // Limpia el formulario para crear una nueva sucursal
+    reset({
+      name: "",
+      address: "",
+      phoneNumber: "",
+      email: "",
+    });
+    setSelectedCars([]);
+    setSelectedEmployees([]);
   }
-}, [initialData, reset, cars, employees]);
+}, [initialData, reset]);
 
-
-
-  const handleCarChange = (carId) => {
-    setSelectedCars((prev) =>
-      prev.includes(carId)
-        ? prev.filter((id) => id !== carId)
-        : [...prev, carId]
+  const handleCarChange = (car) => {
+    setSelectedCars(
+      (prev) =>
+        prev.some((c) => c._id === car._id)
+          ? prev.filter((c) => c._id !== car._id) // Elimina si ya existe
+          : [...prev, car] // Agrega el objeto completo
     );
   };
 
-  const handleEmployeeChange = (employeeId) => {
-    setSelectedEmployees((prev) =>
-      prev.includes(employeeId)
-        ? prev.filter((id) => id !== employeeId)
-        : [...prev, employeeId]
+  const handleEmployeeChange = (employee) => {
+    setSelectedEmployees(
+      (prev) =>
+      prev.some((e) => e._id === employee._id)
+        ? prev.filter((e) => e._id !== employee._id)
+        : [...prev, employee]
     );
   };
+
 
 const onSubmitForm = async (data) => {
   if (!data.name || !data.address || !data.phoneNumber || !data.email) {
@@ -63,8 +70,8 @@ const onSubmitForm = async (data) => {
   const formattedData = {
     ...data,
     phoneNumber: data.phoneNumber.toString(),
-    vehicles: [...new Set(selectedCars)], // Asegúrate de que no haya duplicados
-    employees: [...new Set(selectedEmployees)], // Asegúrate de que no haya duplicados
+    vehicles: selectedCars, // Objetos completos
+    employees: selectedEmployees, // Objetos completos
   };
 
   const result = await onSubmit(formattedData);
@@ -86,8 +93,6 @@ const onSubmitForm = async (data) => {
     });
   }
 };
-
-
 
   if (!isOpen) return null;
 
@@ -157,9 +162,9 @@ const onSubmitForm = async (data) => {
               type="number"
               {...register("phoneNumber", {
                 required: "El número de teléfono es obligatorio",
-                minLength: {
-                  value: 8,
-                  message: "Debe tener al menos 8 dígitos",
+                pattern: {
+                  value: /^[0-9]{8}$/,
+                  message: "Debe ser un número de 8 dígitos",
                 },
               })}
               placeholder="22405232"
@@ -207,8 +212,8 @@ const onSubmitForm = async (data) => {
                 <label key={car._id || car.id} className="block mb-2">
                   <input
                     type="checkbox"
-                    checked={selectedCars.includes(car._id || car.id)}
-                    onChange={() => handleCarChange(car._id || car.id)}
+                    checked={selectedCars.some((c) => c._id === car._id)}
+                    onChange={() => handleCarChange(car)}
                     className="mr-2"
                   />
                   {car.model} - Año: {car.year} - Precio: $
@@ -233,12 +238,10 @@ const onSubmitForm = async (data) => {
                 <label key={employee._id || employee.id} className="block mb-2">
                   <input
                     type="checkbox"
-                    checked={selectedEmployees.includes(
-                      employee._id || employee.id
+                    checked={selectedEmployees.some(
+                      (e) => e._id === employee._id
                     )}
-                    onChange={() =>
-                      handleEmployeeChange(employee._id || employee.id)
-                    }
+                    onChange={() => handleEmployeeChange(employee)}
                     className="mr-2"
                   />
                   {employee.username}

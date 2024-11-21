@@ -16,42 +16,43 @@ const handleOpenModal = async (branch = null) => {
   await getAllCars(); // Asegúrate de tener la lista de vehículos
   await getAllEmployees(); // Asegúrate de tener la lista de empleados
 
-  if (branch) {
-    // Pre-carga empleados y vehículos existentes
-    branch.vehicles = branch.vehicles?.map((vehicle) => vehicle._id) || [];
-    branch.employees = branch.employees?.map((employee) => employee._id) || [];
+  if (!branch) {
+    setSelectedBranch(null); // Limpia el estado para una nueva sucursal
+  } else {
+    setSelectedBranch(branch); // Carga los datos existentes
   }
 
-  setSelectedBranch(branch);
   setIsModalOpen(true);
 };
 
 
-  const handleBranchSubmit = async (data) => {
-    const result = selectedBranch
-      ? await updateBranch(selectedBranch._id, data)
-      : await createBranch(data);
 
-    if (result?.success) {
-      await getAllBranchs();
-      Swal.fire({
-        icon: "success",
-        title: "Operación exitosa",
-        text: `Sucursal ${
-          selectedBranch ? "actualizada" : "creada"
-        } correctamente`,
-        confirmButtonText: "Aceptar",
-      });
-      setIsModalOpen(false);
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: result?.message || "No se pudo completar la operación",
-        confirmButtonText: "Aceptar",
-      });
-    }
-  };
+const handleBranchSubmit = async (data) => {
+  const result = selectedBranch
+    ? await updateBranch(selectedBranch._id, data) // Datos completos
+    : await createBranch(data);
+
+  if (result?.success) {
+    await getAllBranchs();
+    Swal.fire({
+      icon: "success",
+      title: "Operación exitosa",
+      text: `Sucursal ${
+        selectedBranch ? "actualizada" : "creada"
+      } correctamente`,
+      confirmButtonText: "Aceptar",
+    });
+    setIsModalOpen(false);
+  } else {
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: result?.message || "No se pudo completar la operación",
+      confirmButtonText: "Aceptar",
+    });
+  }
+};
+
 
 const handleDeleteBranch = async (branchId) => {
   const confirmation = await Swal.fire({
