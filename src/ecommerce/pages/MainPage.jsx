@@ -3,13 +3,12 @@ import { Link } from "react-router-dom";
 import { FaCar } from "react-icons/fa";
 import { CardView, Footer, Header, Carousel } from "../components";
 import { useCarService } from "../../hooks";
+import { getStores, postRequest } from "../../services/requestService";
 import bgImage from "../../assets/bg-request.png";
-import postRequest from '../../services/requestService'
 import Swal from 'sweetalert2'
 import { ShoppingBagIcon, WrenchScrewdriverIcon, CreditCardIcon, TruckIcon } from "@heroicons/react/24/solid";
 
 const MainPage = () => {
-
   const vehiclesRef = useRef(null); // Referencia para la sección de vehículos
   const quoteRef = useRef(null);    // Referencia para el formulario de cotización
 
@@ -19,13 +18,31 @@ const MainPage = () => {
 
   const { cars, loading, error } = useCarService();
 
-  // FEATURE: RequestForm
-
+  // Datos para marcas y modelos de autos
   const carData = {
     Toyota: ["Corolla", "Camry", "RAV4"],
     Honda: ["Civic", "Accord", "CR-V"],
     Ford: ["Fiesta", "Focus", "Mustang"],
   };
+
+  // Estado para las tiendas
+  const [storeData, setStoreData] = useState([]);
+
+  // Obtener tiendas desde la API
+  useEffect(() => {
+    const fetchStores = async () => {
+      try {
+        const stores = await getStores();
+        // Mapeamos los datos para obtener el formato necesario
+        setStoreData(stores.map((store) => ({ id: store._id, name: store.name })));
+        console.log("Tiendas obtenidas:", stores);
+        console.log("Tiendas mapeadas:", storeData);
+      } catch (error) {
+        console.error("Error al obtener las tiendas:", error);
+      }
+    };
+    fetchStores();
+  }, []);
 
   const [formData, setFormData] = useState({
     customerFirstName: "",
@@ -34,6 +51,7 @@ const MainPage = () => {
     customerPhoneNumber: "",
     requestManufacturer: "",
     requestModel: "",
+    store: "",
   });
 
   const handleChange = (event) => {
@@ -50,6 +68,8 @@ const MainPage = () => {
     event.preventDefault();
 
     const result = await postRequest(formData);
+    console.log("Datos enviados:", formData);
+    console.log("Resultado de la solicitud:", result);
 
     if (result.error) {
       Swal.fire({
@@ -61,7 +81,7 @@ const MainPage = () => {
       Swal.fire({
         icon: 'success',
         title: 'Éxito',
-        text: 'Datos enviados con éxito. Nos pondremos en contacto contigo a la brevedad posible.',
+        text: 'Nos pondremos en contacto contigo a la brevedad posible',
       });
     }
   };
@@ -192,16 +212,6 @@ const MainPage = () => {
         </div>
       </section>
 
-      {/* Manejo de error y carga */}
-      {/* {loading && (
-        <div className="text-center text-lg text-gray-400 mt-8">
-          Cargando vehículos...
-        </div>
-      )}
-      {error && (
-        <div className="text-center text-lg text-red-500 mt-8">{error}</div>
-      )} */}
-
       {/* Sección de Vehículos */}
       <section ref={vehiclesRef} aria-labelledby="our-vehicles" className="my-12">
         <div className="flex justify-center items-center">
@@ -209,7 +219,7 @@ const MainPage = () => {
             id="our-vehicles"
             className="text-3xl sm:text-4xl md:text-5xl font-raleway font-bold text-white py-3 sm:py-4 px-4 sm:px-6 mb-3 sm:mb-4 inline-flex items-center"
           >
-            {/* <FaCar className="mr-3 sm:mr-4" size={30} /> */} Nuestra selección 
+            {/* <FaCar className="mr-3 sm:mr-4" size={30} /> */} Nuestra selección
           </h2>
         </div>
         {!loading && !error && cars.length > 0 && (
@@ -318,6 +328,21 @@ const MainPage = () => {
                       </option>
                     ))}
                 </select>
+                <select
+                  name="store"
+                  value={formData.store}
+                  onChange={handleChange}
+                  className="bg-[#525252] bg-opacity-0 border text-white p-4 rounded-lg focus:outline-none w-full"
+                >
+                  <option className="text-black" value="">
+                    Selecciona una sucursal
+                  </option>
+                  {storeData.map((store) => (
+                    <option className="text-black" key={store.id} value={store.id}>
+                      {store.name}
+                    </option>
+                  ))}
+                </select>
               </div>
               <button
                 type="submit"
@@ -336,4 +361,5 @@ const MainPage = () => {
 };
 
 export default MainPage;
+
 
