@@ -20,11 +20,18 @@ export const useBranchService = () => {
     }
   };
 
-  const createBranch = async (branchData) => {
+const createBranch = async (branchData) => {
   try {
-    const response = await EcommerApi.post("/stores", branchData);
+    // Formatear los datos antes de enviar
+    const formattedBranchData = {
+      ...branchData,
+      phoneNumber: branchData.phoneNumber.toString(), // Asegúrate de que sea string
+    };
+
+    const response = await EcommerApi.post("/stores", formattedBranchData);
     return { success: true, data: response.data };
   } catch (error) {
+    console.error("Error en la solicitud POST:", error.response?.data || error.message);
     return {
       success: false,
       message: error.response?.data?.message || "Error al crear la sucursal",
@@ -33,6 +40,49 @@ export const useBranchService = () => {
 };
 
 
+const updateBranch = async (branchId, branchData) => {
+  // Elimina valores nulos o no definidos
+  const filteredData = Object.fromEntries(
+    Object.entries(branchData).filter(([_, value]) => value != null)
+  );
+
+  // Asegúrate de enviar solo identificadores de empleados y vehículos
+  if (filteredData.employees) {
+    filteredData.employees = filteredData.employees.map((employee) => employee._id);
+  }
+  if (filteredData.vehicles) {
+    filteredData.vehicles = filteredData.vehicles.map((vehicle) => vehicle._id);
+  }
+
+  console.log("Datos enviados al backend:", filteredData); // Debugging
+
+  try {
+    const response = await EcommerApi.put(`/stores/${branchId}`, filteredData);
+    console.log("Respuesta del servidor:", response.data); // Debugging
+    return { success: true, data: response.data };
+  } catch (error) {
+    console.error("Error en el backend:", error.response?.data); // Debugging
+    return {
+      success: false,
+      message: error.response?.data?.message || "Error al actualizar la sucursal",
+    };
+  }
+};
+
+
+  const deleteBranch = async (branchId) => {
+    try {
+      await EcommerApi.delete(`/stores/${branchId}`);
+      // Actualiza la lista de sucursales después de eliminar
+      setBranchs((prevBranchs) => prevBranchs.filter((branch) => branch._id !== branchId));
+      return { success: true };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.response?.data?.message || "Error al eliminar la sucursal",
+      };
+    }
+  };
 
   useEffect(() => {
     getAllBranchs(); // Llama al método al montar el componente
@@ -43,7 +93,9 @@ return {
   loading,
   error,
   getAllBranchs,
-  createBranch, 
+  createBranch,
+  updateBranch, 
+  deleteBranch,
 };
 
 };

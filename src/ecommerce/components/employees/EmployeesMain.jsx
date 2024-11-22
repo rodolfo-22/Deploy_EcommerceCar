@@ -166,8 +166,10 @@ const deleteEmploye = async (id) => {
               <th className="px-4 py-2 font-semibold">Nombre</th>
               <th className="px-4 py-2 font-semibold">Email</th>
               <th className="px-4 py-2 font-semibold">Código</th>
-              <th className="px-4 py-2 font-semibold">Sucursal</th>
-              <th className="px-4 py-2 font-semibold">Acciones</th>
+              <th className="px-4 py-2 font-semibold ">Sucursal</th>
+              <th className="px-4 py-2 font-semibold flex justify-center items-center space-x-2">
+                Acciones
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -180,10 +182,10 @@ const deleteEmploye = async (id) => {
                   <td className="px-4 py-2">{employee.username}</td>
                   <td className="px-4 py-2">{employee.email}</td>
                   <td className="px-4 py-2">{employee._id}</td>
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-2 ">
                     {employee.branchName || "Sin sucursal"}
                   </td>
-                  <td className="px-4 py-2 flex justify-center space-x-2">
+                  <td className="px-4 py-2 flex justify-center items-center space-x-2">
                     <button
                       onClick={() => handleEditClick(employee)}
                       className="text-blue-500 hover:underline"
