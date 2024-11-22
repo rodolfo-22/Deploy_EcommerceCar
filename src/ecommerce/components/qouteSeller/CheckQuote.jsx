@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useQuoteService, useBranchService } from "../../../hooks";
 import QuoteDetailsModal from "./QuoteDetailsModal"; 
+import Swal from "sweetalert2";
+
 
 const QuotesComponent = () => {
   const { getQuotesByBranch, deleteQuote } = useQuoteService();
@@ -60,18 +62,35 @@ const QuotesComponent = () => {
     fetchBranches(); // Llama a la función local
   }, []); // Dependencias vacías
 
-const handleDeleteQuote = async (quoteId) => {
-  console.log("Eliminando cotización con ID:", quoteId);
-  try {
-    await deleteQuote(quoteId);
-    setQuotes((prevQuotes) =>
-      prevQuotes.filter((quote) => quote._id !== quoteId)
-    );
-  } catch (err) {
-    console.error("Error al eliminar la cotización:", err);
-    alert("Error al eliminar la cotización.");
+  const handleDeleteQuote = async (quoteId) => {
+  const confirmation = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esta acción eliminará la cotizacion permanentemente.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    });
+
+    if (confirmation.isConfirmed) {
+        try {
+          await deleteQuote(quoteId);
+          setQuotes((prevQuotes) =>
+            prevQuotes.filter((quote) => quote._id !== quoteId)
+          );
+        } catch (err) {
+            console.error("Error al eliminar la cotizacion:", err);
+
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: "No se pudo eliminar al empleado",
+              confirmButtonText: "Aceptar",
+            });
+        }
+      }
   }
-};
+
 
   return (
     <div className="p-4 flex justify-center items-center">
