@@ -57,6 +57,11 @@ const MainPage = () => {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
+    // Limitar el número de caracteres a 8 para el campo de teléfono
+    if (name === "customerPhoneNumber" && value.length > 8) {
+      return;
+    }
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -64,27 +69,76 @@ const MainPage = () => {
     }));
   };
 
-  const sendRequest = async (event) => {
-    event.preventDefault();
+const sendRequest = async (event) => {
+  event.preventDefault();
 
-    const result = await postRequest(formData);
-    console.log("Datos enviados:", formData);
-    console.log("Resultado de la solicitud:", result);
+  // Validar que todos los campos obligatorios estén llenos
+  if (
+    !formData.customerFirstName ||
+    !formData.customerLastName ||
+    !formData.customerEmail ||
+    !formData.customerPhoneNumber ||
+    !formData.requestManufacturer ||
+    !formData.requestModel ||
+    !formData.store
+  ) {
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "Por favor, completa todos los campos antes de enviar.",
+    });
+    return;
+  }
 
-    if (result.error) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Hubo un problema al enviar la solicitud',
-      });
-    } else {
-      Swal.fire({
-        icon: 'success',
-        title: 'Éxito',
-        text: 'Nos pondremos en contacto contigo a la brevedad posible',
-      });
-    }
-  };
+  // Validar que el teléfono solo contenga números
+  const phoneRegex = /^[0-9]{8}$/;
+  if (!phoneRegex.test(formData.customerPhoneNumber)) {
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "El número de teléfono debe contener exactamente 8 dígitos.",
+    });
+    return;
+  }
+
+  // Validar que el correo sea válido
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(formData.customerEmail)) {
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "El correo electrónico no es válido. Asegúrate de incluir un @ y un dominio",
+    });
+    return;
+  }
+
+  const result = await postRequest(formData);
+
+  if (result.error) {
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "Hubo un problema al enviar la solicitud",
+    });
+  } else {
+    Swal.fire({
+      icon: "success",
+      title: "Éxito",
+      text: "Nos pondremos en contacto contigo a la brevedad posible",
+    });
+
+    // Limpiar el formulario
+    setFormData({
+      customerFirstName: "",
+      customerLastName: "",
+      customerEmail: "",
+      customerPhoneNumber: "",
+      requestManufacturer: "",
+      requestModel: "",
+      store: "",
+    });
+  }
+};
 
   const [showMenu, setShowMenu] = useState(false);
   const [visible, setVisible] = useState(true);
@@ -107,9 +161,7 @@ const MainPage = () => {
   return (
     <div className="bg-[#121212] min-h-screen text-white">
       {/* <Header /> */}
-      <header
-        className="bg-black bg-opacity-50 pt-8 pb-8 fixed w-full z-50 transition-transform duration-300"
-      >
+      <header className="bg-black bg-opacity-50 pt-8 pb-8 fixed w-full z-50 transition-transform duration-300">
         <div className="container mx-auto flex justify-between items-center px-4">
           {/* Logo */}
           <div>
@@ -140,8 +192,9 @@ const MainPage = () => {
 
           {/* Navegación */}
           <nav
-            className={`flex-col md:flex-row md:flex items-center md:space-x-6 ${showMenu ? "flex" : "hidden"
-              } absolute top-16 left-0 right-0 md:static md:bg-transparent bg-black bg-opacity-90 md:space-y-0 space-y-4 p-4 md:p-0`}
+            className={`flex-col md:flex-row md:flex items-center md:space-x-6 ${
+              showMenu ? "flex" : "hidden"
+            } absolute top-16 left-0 right-0 md:static md:bg-transparent bg-black bg-opacity-90 md:space-y-0 space-y-4 p-4 md:p-0`}
           >
             <button
               onClick={() => handleScrollTo(vehiclesRef)}
@@ -171,9 +224,12 @@ const MainPage = () => {
       <Carousel />
       <section className="bg-[#2D2D2D] py-16 px-8 text-center text-white flex flex-col">
         <div className="max-w-4xl mx-auto mb-12">
-          <h2 className="text-5xl font-bold mb-4">Explora nuestros servicios y vehículos</h2>
+          <h2 className="text-5xl font-bold mb-4">
+            Explora nuestros servicios y vehículos
+          </h2>
           <p className="text-lg mb-4">
-            Ofrecemos soluciones integrales para la compra, renta y mantenimiento de autos
+            Ofrecemos soluciones integrales para la compra, renta y
+            mantenimiento de autos
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -182,7 +238,8 @@ const MainPage = () => {
             <ShoppingBagIcon className="w-12 h-12 text-[#286181] mb-4" />
             <h3 className="text-xl font-bold mb-2">Compra de Vehículos</h3>
             <p className="text-gray-400 text-lg">
-              Encuentra el auto ideal para ti. Contamos con todas las marcas y modelos disponibles
+              Encuentra el auto ideal para ti. Contamos con todas las marcas y
+              modelos disponibles
             </p>
           </div>
           {/* Card 2: Renta de vehículos */}
@@ -190,7 +247,8 @@ const MainPage = () => {
             <TruckIcon className="w-12 h-12 text-[#286181] mb-4" />
             <h3 className="text-xl font-bold mb-2">Renta de Vehículos</h3>
             <p className="text-gray-400 text-lg">
-              Renta autos por día, semana o mes. Ideal para viajes, eventos o negocios
+              Renta autos por día, semana o mes. Ideal para viajes, eventos o
+              negocios
             </p>
           </div>
           {/* Card 3: Financiamiento */}
@@ -198,7 +256,8 @@ const MainPage = () => {
             <CreditCardIcon className="w-12 h-12 text-[#286181] mb-4" />
             <h3 className="text-xl font-bold mb-2">Financiamiento</h3>
             <p className="text-gray-400 text-lg">
-              Ofrecemos planes flexibles de financiamiento para que adquieras tu auto sin preocupaciones
+              Ofrecemos planes flexibles de financiamiento para que adquieras tu
+              auto sin preocupaciones
             </p>
           </div>
           {/* Card 4: Mantenimiento */}
@@ -206,20 +265,26 @@ const MainPage = () => {
             <WrenchScrewdriverIcon className="w-12 h-12 text-[#286181] mb-4" />
             <h3 className="text-xl font-bold mb-2">Mantenimiento</h3>
             <p className="text-gray-400 text-lg">
-              Mantén tu vehículo en óptimas condiciones con nuestro servicio de mantenimiento especializado
+              Mantén tu vehículo en óptimas condiciones con nuestro servicio de
+              mantenimiento especializado
             </p>
           </div>
         </div>
       </section>
 
       {/* Sección de Vehículos */}
-      <section ref={vehiclesRef} aria-labelledby="our-vehicles" className="my-12">
+      <section
+        ref={vehiclesRef}
+        aria-labelledby="our-vehicles"
+        className="my-12"
+      >
         <div className="flex justify-center items-center">
           <h2
             id="our-vehicles"
             className="text-3xl sm:text-4xl md:text-5xl font-raleway font-bold text-white py-3 sm:py-4 px-4 sm:px-6 mb-3 sm:mb-4 inline-flex items-center"
           >
-            {/* <FaCar className="mr-3 sm:mr-4" size={30} /> */} Nuestra selección
+            {/* <FaCar className="mr-3 sm:mr-4" size={30} /> */} Nuestra
+            selección
           </h2>
         </div>
         {!loading && !error && cars.length > 0 && (
@@ -251,8 +316,8 @@ const MainPage = () => {
         <div className="flex flex-col md:mr-10 w-full max-w-2xl">
           <div className="mb-8 px-4">
             <p className="text-xl sm:text-2xl md:text-4xl font-bold text-white leading-snug text-center md:text-start drop-shadow-lg">
-              Soluciones personalizadas, atención impecable y vehículos que se ajustan
-              a tus necesidades y estilo de vida
+              Soluciones personalizadas, atención impecable y vehículos que se
+              ajustan a tus necesidades y estilo de vida
             </p>
           </div>
           <div className="p-8 bg-opacity-50 bg-black rounded-lg w-full mx-auto">
@@ -294,6 +359,7 @@ const MainPage = () => {
                   value={formData.customerPhoneNumber}
                   onChange={handleChange}
                   placeholder="Teléfono"
+                  maxLength={8} 
                   className="bg-[#525252] bg-opacity-0 border text-white p-4 rounded-lg placeholder:text-white focus:outline-none w-full"
                 />
                 <select
@@ -338,7 +404,11 @@ const MainPage = () => {
                     Selecciona una sucursal
                   </option>
                   {storeData.map((store) => (
-                    <option className="text-black" key={store.id} value={store.id}>
+                    <option
+                      className="text-black"
+                      key={store.id}
+                      value={store.id}
+                    >
                       {store.name}
                     </option>
                   ))}
