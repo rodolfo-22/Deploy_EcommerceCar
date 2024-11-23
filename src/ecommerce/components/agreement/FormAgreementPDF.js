@@ -50,7 +50,7 @@ export const generateContractPDF = (data) => {
   doc.text(`Comisiones Aplicables: ${data.applicableFees}%`, 10, 145);
 
  // Agregar espacio antes del texto adicional
-  const additionalTextStartY = 140; // Ajusta este valor para agregar espacio
+  const additionalTextStartY = 150; // Ajusta este valor para agregar espacio
   
   // Texto adicional
   doc.setFontSize(12);
