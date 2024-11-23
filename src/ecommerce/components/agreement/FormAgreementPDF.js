@@ -50,7 +50,7 @@ export const generateContractPDF = (data) => {
   doc.text(`Comisiones Aplicables: ${data.applicableFees}%`, 10, 145);
 
  // Agregar espacio antes del texto adicional
-  const additionalTextStartY = 150; // Ajusta este valor para agregar espacio
+  const additionalTextStartY = 160; // Ajusta este valor para agregar espacio
   
   // Texto adicional
   doc.setFontSize(12);
@@ -68,22 +68,21 @@ export const generateContractPDF = (data) => {
   // Firmas
   doc.setFontSize(14);
   doc.setFont("Helvetica", "bold");
-  doc.text("Firmas", 105, 190, { align: "center" });
+  doc.text("Firmas", 105, 195, { align: "center" });
 
   doc.setFontSize(12);
   doc.setFont("Helvetica", "normal");
-  doc.text("Firma del Acreditado:", 10, 200);
-  doc.line(50, 200, 200, 200); // Línea de la firma
-  doc.text(`Nombre completo: ${data.buyerName}`, 10, 210);
-  doc.text("Número de Identificación: <IDENTIFICACION>", 10, 215);
-  doc.text("Si es Pasaporte, nombrar país que lo otorga", 10, 220);
-  doc.text("Número de Registro Tributario Nacional (RTN): <RTN>", 10, 225);
+  doc.text("Firma del Acreditado:", 10, 210);
+  doc.line(50, 210, 200, 210); // Línea de la firma
+  doc.text(`Nombre completo: ${data.buyerName}`, 10, 220);
+  doc.text(`Número de Identificación: ${data.identification}`, 10, 225);
+  doc.text("Si es Pasaporte, nombrar país que lo otorga", 10, 230);
 
-  doc.text("Firma de CARCONNECT:", 10, 240);
-  doc.line(50, 240, 200, 240); // Línea de la firma
-  doc.text("Nombre del Contador: Jose Miguel Fajardo Ulloa", 10, 250);
-  doc.text("Cargo: Contador General de CARCONNECT", 10, 255);
-  doc.text("Número de Registro Tributario Nacional (RTN): <RTN>", 10, 260);
+  doc.text("Firma de CARCONNECT:", 10, 250);
+  doc.line(60, 250, 200, 250); // Línea de la firma
+  doc.text("Nombre del Contador: Jose Enmanuel Arajuo Cortez", 10, 260);
+  doc.text("Cargo: Contador General de CARCONNECT", 10, 265);
+  doc.text("Número de Registro Tributario  (NIT): 0152-250398-103-1", 10, 270);
 
   // Descargar el archivo PDF
   const sanitizedBuyerName = data.buyerName.replace(/[^a-zA-Z0-9 ]/g, "_");
