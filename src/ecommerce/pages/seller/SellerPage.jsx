@@ -1,8 +1,19 @@
 import React, { useState } from "react";
-import {  mdiTable, mdiFileSearch, mdiCar, mdiLogout } from "@mdi/js";
+import {
+  mdiTable,
+  mdiFileSearch,
+  mdiCar,
+  mdiLogout,
+  mdiFileEdit,
+} from "@mdi/js";
 import Icon from "@mdi/react";
 import { Link } from "react-router-dom";
-import { VehiclesByBranch, CheckQuote, LoanMain } from "../../components";
+import {
+  VehiclesByBranch,
+  CheckQuote,
+  LoanMain,
+  AgreementMain,
+} from "../../components";
 import { useAuthStore } from "../../../hooks";
 import profileImage from "../../../assets/seller1.jpg";
 
@@ -68,6 +79,18 @@ const AdminPage = () => {
                 Vehículos sucursal
               </Link>
             </div>
+            <div
+              onClick={() => setSelectedComponent(4)}
+              className="text-center w-full"
+            >
+              <Link
+                to="#"
+                className="flex items-center justify-center gap-3 py-2 text-xl w-full"
+              >
+                <Icon path={mdiFileEdit} size={1.5} />
+                Contrato
+              </Link>
+            </div>
           </div>
 
           {/* Botón de cerrar sesión */}
@@ -87,6 +110,7 @@ const AdminPage = () => {
           {selectedComponent === 1 && <CheckQuote />}
           {selectedComponent === 2 && <LoanMain />}
           {selectedComponent === 3 && <VehiclesByBranch />}
+          {selectedComponent === 4 && <AgreementMain />}
         </div>
       </div>
     );
