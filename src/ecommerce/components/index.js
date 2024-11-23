@@ -11,3 +11,4 @@ export {default as EmployeesMain} from './employees/EmployeesMain';
 export {default as BranchMain} from './branchOffice/BranchMain';
 export {default as CheckQuote} from './qouteSeller/CheckQuote';
 export {default as LoanMain} from './loan/LoanMain';
+export {default as AgreementMain} from './agreement/AgreementMain';

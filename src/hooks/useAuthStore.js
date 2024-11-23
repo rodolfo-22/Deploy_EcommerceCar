@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { EcommerApi } from '../api';
-import { clearErrorMessage, onChecking, onLogin, onLogout } from '../store';
-
+import {  onChecking, onLogin, onLogout } from '../store';
+import jwtDecode from "jwt-decode";
 
 export const useAuthStore = () => {
 
@@ -16,16 +16,25 @@ export const useAuthStore = () => {
         // Almacena el token y la fecha de inicio
         localStorage.setItem('token', data.token);
         localStorage.setItem('token-init-date', new Date().getTime());
+        // Guarda el nombre del usuario en localStorage
+        const username = jwtDecode(data.token).username || data.user.username;
+        localStorage.setItem('username', username);
+
+        // Guarda datos adicionales (como el nombre y rol del usuario) si no están en el token
+        const decodedToken = jwtDecode(data.token);
 
         // Incluye el rol en el dispatch
         dispatch(onLogin({
-            name: data.user.username, // o data.user.name si usas nombre en lugar de username
-            uid: data.user._id,
-            role: data.user.role
+            name: username,
+            uid: jwtDecode(data.token)._id || data.user._id,
+            role: jwtDecode(data.token).role || data.user.role,
         }));
         // Retorna un estado de éxito
         return { success: true };
     } catch (error) {
+        // Manejar el error sin mostrarlo en la consola
+        console.error("Error en el inicio de sesión:", error.response?.data?.message || "Error desconocido");
+
         // Llamar a onLogout para resetear el estado en caso de error
         dispatch(onLogout());
         
@@ -34,11 +43,10 @@ export const useAuthStore = () => {
     }
     }
 
-    const startRegister = async ({ username, email, password }) => {
+    const startRegister = async ({ username, email, password, role }) => {
         try {
             const { data } = await EcommerApi.post('/users/register', { 
-                username, email, password, 
-                role: 'seller'
+                username, email, password, role
                 });
 
             // Verifica si el registro fue exitoso
@@ -72,6 +80,38 @@ const checkAuthToken = async () => {
     }
 };
 
+//alternativa
+const initAuth = () => {
+    const token = localStorage.getItem("token");
+    const username = localStorage.getItem("username");
+
+    if (!token) {
+        dispatch(onLogout());
+        return;
+    }
+
+    try {
+        const decodedToken = jwtDecode(token);
+        const currentTime = Date.now() / 1000;
+
+        // Verifica si el token ha expirado
+        if (decodedToken.exp < currentTime) {
+            dispatch(onLogout());
+        } else {
+            // Token válido: Inicializa la sesión
+            dispatch(onLogin({
+                name: username || "Usuario", // Usa el nombre del localStorage
+                uid: decodedToken._id,
+                role: decodedToken.role,
+            }));
+        }
+    } catch (error) {
+        console.error("Error al decodificar el token:", error);
+        dispatch(onLogout());
+    }
+};
+
+
 
     const startLogout = () => {
         localStorage.clear();
@@ -87,10 +127,10 @@ const checkAuthToken = async () => {
         user, 
 
         //* Métodos
-        checkAuthToken,
         startLogin,
         startRegister,
         startLogout,
+        initAuth,
         }
 
 }

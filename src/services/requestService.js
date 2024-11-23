@@ -3,10 +3,20 @@ import axios from 'axios'
 const apiUrl = import.meta.env.VITE_API_URL;
 //`${apiUrl}/request`
 
-const postRequest = async (data) => {
+export const getStores = async () => {
+    try{
+        const response = await axios.get(`${apiUrl}/stores`);
+        return response.data;
+    }catch(error){
+        console.error('Error inesperado:', error.message);
+        return { error: true, message: error.message };
+    }
+}
+
+export const postRequest = async (data) => {
     try {
         const response = await axios.post(
-            'http://localhost:3000/api/requests', // URL de la API
+            `${apiUrl}/requests`, // URL de la API
             JSON.stringify(data), // Convertir objeto a JSON
             {
                 headers: {
@@ -55,4 +65,3 @@ const postRequest = async (data) => {
     }
 }
 
-export default postRequest;
