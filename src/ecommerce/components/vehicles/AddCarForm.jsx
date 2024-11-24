@@ -22,8 +22,8 @@ const AddCarForm = ({ car, onSave, onClose }) => {
   const models = {
     Toyota: ["Corolla", "Camry", "RAV4"],
     Honda: ["Civic", "Accord", "CR-V"],
-    Hyundai: ["Elantra", "Sonata", "Tucson"],
-    Kia: ["Soul", "Picanto", "Sportage"],
+    Hyundai: ["Elantra", "Sonata", "Tucson", "Accent"],
+    Kia: ["Soul", "Picanto", "Forte", "Rio"],
   };
 
     const [selectedManufacturer, setSelectedManufacturer] = useState("");
@@ -198,7 +198,7 @@ const AddCarForm = ({ car, onSave, onClose }) => {
               Precio
             </label>
             <input
-              type="number"
+              type="text"
               placeholder="20000"
               {...register("price", { required: "Este campo es obligatorio" })}
               className="border border-gray-300 w-full p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"

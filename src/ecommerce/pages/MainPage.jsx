@@ -20,9 +20,10 @@ const MainPage = () => {
 
   // Datos para marcas y modelos de autos
   const carData = {
-    Toyota: ["Corolla", "Camry", "RAV4"],
-    Honda: ["Civic", "Accord", "CR-V"],
-    Ford: ["Fiesta", "Focus", "Mustang"],
+    Toyota: ["Corolla", "RAV4", "Camry"],
+    Honda: ["Civic", "Accord", "CRV"],
+    Kia: ["Rio", "Forte", "Soul", "Picanto"],
+    Hyundai: ["Accent", "Elantra", "Tucson", "Sonata"],
   };
 
   // Estado para las tiendas
