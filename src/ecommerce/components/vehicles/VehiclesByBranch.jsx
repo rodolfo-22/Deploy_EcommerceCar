@@ -101,7 +101,7 @@ const VehiclesByBranch = () => {
                   <td className="px-4 py-2">{car.color}</td>
                   <td className="px-4 py-2">{car.transmission}</td>
                   <td className="px-4 py-2">{car.year}</td>
-                  <td className="px-4 py-2">{car.price}</td>
+                  <td className="px-4 py-2">${car.price}</td>
                   <td className="px-4 py-2">{car.stock}</td>
                   <td className="px-4 py-2">{car.status}</td>
                 </tr>

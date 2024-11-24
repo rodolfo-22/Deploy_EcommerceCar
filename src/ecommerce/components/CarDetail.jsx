@@ -69,19 +69,19 @@ const CarDetail = () => {
           </div>
           <div className="flex flex-col bg-black bg-opacity-50 text-black mr-4 ml-4 rounded-3xl pt-4 sm:bg-transparent sm:flex-row sm:justify-evenly sm:items-center">
             <div className="text-center sm:text-left pb-6 sm:pb-0">
-              <p className="text-3xl text-white">{car.fuelType}</p>
+              <p className="text-4xl text-white">{car.fuelType}</p>
               <p className="text-white">Tipo de combustible</p>
             </div>
             <div className="text-center sm:text-left pb-6 sm:pb-0">
-              <p className="text-3xl text-white">{car.transmission}</p>
+              <p className="text-4xl text-white">{car.transmission}</p>
               <p className="text-white">Transmisión</p>
             </div>
             <div className="text-center sm:text-left pb-6 sm:pb-0">
-              <p className="text-3xl text-white">{car.fuelRange}</p>
+              <p className="text-4xl text-white">{car.fuelRange} mi</p>
               <p className="text-white">Rendimiento del combustible</p>
             </div>
             <div className="text-center sm:text-left pb-6 sm:pb-0">
-              <p className="text-3xl text-white">{car.engine}</p>
+              <p className="text-4xl text-white">{car.engine}</p>
               <p className="text-white">Cilindrada</p>
             </div>
           </div>
@@ -103,7 +103,7 @@ const CarDetail = () => {
               </div>
               <div>
                 <p className="text-gray-500">Rango</p>
-                <p className="text-xl">{car.fuelRange}</p>
+                <p className="text-xl">{car.fuelRange} mi</p>
               </div>
               <div>
                 <p className="text-gray-500">Aceleración</p>

@@ -53,7 +53,7 @@ const EditCarForm = ({ cars, updateCar }) => {
         <div>
           <label className="block text-sm">Precio</label>
           <input
-            type="number"
+            type="text"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             className="border w-full p-2"

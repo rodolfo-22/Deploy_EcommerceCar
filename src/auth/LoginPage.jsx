@@ -26,7 +26,7 @@ const Login = () => {
     });
 
     if (!result.success) {
-      Swal.fire("Nonono, error en la autenticación", result.message, "error");
+      Swal.fire("Error en la autenticación", result.message, "error");
     }
   };
 
