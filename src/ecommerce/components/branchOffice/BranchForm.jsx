@@ -216,8 +216,7 @@ const onSubmitForm = async (data) => {
                     onChange={() => handleCarChange(car)}
                     className="mr-2"
                   />
-                  {car.model} - Año: {car.year} - Precio: $
-                  {car.price?.toFixed(2)}
+                  {car.model} - Año: {car.year} - Precio: ${car.price || "N/A"}
                 </label>
               ))
             ) : (
